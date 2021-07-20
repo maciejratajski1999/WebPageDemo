@@ -1,0 +1,17 @@
+div.gallery {
+    position:relative;
+    left: 5%;
+    width: 90%;
+}
+
+img.image{
+    padding: 1% 1.3%;
+    position: relative;
+    width: 30%;
+    margin: auto;
+}
+
+.image:hover {
+    z-index: 1;
+    transform: scale(2,2);
+}
