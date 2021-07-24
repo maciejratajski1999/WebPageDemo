@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from forms import RegistrationForm, LoginForm
 app = Flask(__name__)
 
 subpages = {'home' : {"Home" : "/"}, 'about' : {"About" : "/about"}, 'gallery' : {"Gallery" : "/gallery"}}
@@ -19,3 +20,12 @@ images = ['tux.png' for i in range(10)]
 def gallery():
     current = 'gallery'
     return render_template('gallery.html', subpages=subpages, current=current, images=images)
+
+@app.route("/login")
+def login():
+    return render_template('login.html', subpages=subpages)
+
+@app.route("/register")
+def register():
+    form = RegistrationForm()
+    return render_template('register.html', subpages=subpages, form=form)
