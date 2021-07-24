@@ -4,6 +4,16 @@
     <main>
         <form method="POST" action="">
             {{ form.hidden_tag() }}
+                {% for item in form %}
+                    {% if item.id != 'csrf_token'%}
+                        <div class="form">
+                                {% if item.id != 'submit' %}
+                            <h2>{{item.label}}</h2>
+                                {% endif %}
+                                {{item}}
+                        </div>
+                    {% endif %}
+                {% endfor %}
         </form>
     </main>
 {% endblock %}

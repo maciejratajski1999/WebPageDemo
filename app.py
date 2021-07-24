@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from forms import RegistrationForm, LoginForm
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'eluwina'
 
 subpages = {'home' : {"Home" : "/"}, 'about' : {"About" : "/about"}, 'gallery' : {"Gallery" : "/gallery"}}
 
