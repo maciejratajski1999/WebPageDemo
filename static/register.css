@@ -2,11 +2,17 @@ form {
     padding: 10px 15px;
 }
 div.form {
-    padding: 5px 5px;
+    display: block;
+    padding: 15px 5px;
 }
 
 input {
     background-color: pink;
+    width: 250px;
+}
+#submit{
+    height: 30px;
+    width: 259px;
 }
 
 div.alert {
@@ -15,4 +21,16 @@ div.alert {
     color: white;
     font-size: 150%;
     padding: 15px;
+}
+
+a.error{
+    display: block;
+    width: 254px;
+    padding: 1px 1px;
+    background-color: rgb(255, 0, 0, 0.2);
+    border-style: solid;
+    border-color: red;
+    border-width: 1px;
+    color: black;
+    font-size: small;
 }
