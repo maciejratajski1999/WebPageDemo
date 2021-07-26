@@ -12,6 +12,7 @@ img.image{
 }
 
 .image:hover {
+    transition: all 0.2s ease-out;
     z-index: 1;
     transform: scale(2,2);
 }

@@ -8,3 +8,11 @@ div.form {
 input {
     background-color: pink;
 }
+
+div.alert {
+    position: fixed;
+    text-shadow: 2px 2px 7px red;
+    color: white;
+    font-size: 150%;
+    padding: 15px;
+}
