@@ -5,10 +5,16 @@ div.form {
     display: block;
     padding: 15px 5px;
 }
+#remember-me{
+    display: flex;
+}
 
 input {
     background-color: pink;
     width: 250px;
+}
+#remember {
+    max-width: 20px;
 }
 #submit{
     height: 30px;
@@ -34,3 +40,4 @@ a.error{
     color: black;
     font-size: small;
 }
+
