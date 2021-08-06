@@ -1,11 +1,6 @@
-from flask import Flask, render_template, flash, redirect, url_for
-from forms import RegistrationForm, LoginForm
-from flask_sqlalchemy import SQLAlchemy
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'eluwina'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
-
+from flask import render_template, flash, redirect, url_for
+from app.forms import RegistrationForm, LoginForm
+from app import app, db
 
 subpages = {'home' : {"Home" : "/"}, 'about' : {"About" : "/about"}, 'gallery' : {"Gallery" : "/gallery"}}
 
@@ -35,10 +30,11 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        from models import User
+        from app.models import User
         new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
         db.session.add(new_user)
         db.session.commit()
         flash(f"Registered: {form.username.data}", 'alert')
         return redirect(url_for('home'))
     return render_template('register.html', subpages=subpages, form=form)
+
