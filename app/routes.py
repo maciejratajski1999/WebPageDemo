@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for
 from app.forms import RegistrationForm, LoginForm
-from app import app, db
+from app import app, db, bcrypt
 
 subpages = {'home' : {"Home" : "/"}, 'about' : {"About" : "/about"}, 'gallery' : {"Gallery" : "/gallery"}}
 
@@ -31,7 +31,8 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         from app.models import User
-        new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         flash(f"Registered: {form.username.data}", 'alert')
