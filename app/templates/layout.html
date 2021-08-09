@@ -24,7 +24,9 @@
         {% endfor %}
       {% endfor %}
       {% if current_user.is_authenticated %}
-        <li><a class="logout" href="/logout">Logout</a></li>
+        <li><a class="login" href="/logout">Logout</a></li>
+      {% else %}
+        <li><a class="login" href="/login">Login</a></li>
       {% endif %}
     </ul>
   </nav>
