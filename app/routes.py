@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for
 from app.forms import RegistrationForm, LoginForm
 from app import app, db, bcrypt
 from app.models import User
-from flask_login import login_user, current_user
+from flask_login import login_user, logout_user, current_user
 
 subpages = {'home' : {"Home" : "/"}, 'about' : {"About" : "/about"}, 'gallery' : {"Gallery" : "/gallery"}}
 
@@ -54,3 +54,7 @@ def register():
         return redirect(url_for('home'))
     return render_template('register.html', subpages=subpages, form=form)
 
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))

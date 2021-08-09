@@ -23,6 +23,9 @@
           {% endif %}
         {% endfor %}
       {% endfor %}
+      {% if current_user.is_authenticated %}
+        <li><a class="logout" href="/logout">Logout</a></li>
+      {% endif %}
     </ul>
   </nav>
 {% endblock %}

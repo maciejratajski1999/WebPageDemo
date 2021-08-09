@@ -7,10 +7,10 @@ nav ul{
     border: 1px solid #000000;
 }
 nav li{
-    float: left;
+    display: inline;
 }
 nav li a {
-    display: block;
+    float: left;
     padding: 15px 20px;
     transition: background-color 0.5s ease;
     text-decoration: none;
@@ -20,6 +20,9 @@ nav li a {
 }
 nav li a.current {
     background-color: rgb(255, 255, 255, 0.3);
+}
+nav li a.logout {
+    float: right;
 }
 nav li a:hover{
     background-color: #951a1a
