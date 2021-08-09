@@ -8,7 +8,7 @@ app.config['SECRET_KEY'] = 'eluwina'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
-login_manager = LoginManager
+login_manager = LoginManager(app)
 
 from app import routes
 
