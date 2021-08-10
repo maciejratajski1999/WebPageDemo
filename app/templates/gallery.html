@@ -2,10 +2,23 @@
 {% block main %}
     <h1>Gallery</h1>
     <main>
+        <form method="POST" action="">
         <div class="gallery">
-            {% for image in images %}
-                <img class="image" src={{url_for('static', filename=image)}}>
+            {% for picture in pictures %}
+                <img class="image" src={{url_for('static', filename=picture)}}>
             {% endfor %}
+
+            {% if form %}
+                {{ form.hidden_tag() }}
+                    <div class="add-picture">
+                    {% for item in form %}
+                        {% if item.id != 'csrf_token'%}
+                                {{item}}
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+            {% endif %}
         </div>
+        </form>
     </main>
 {% endblock %}

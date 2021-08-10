@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for
-from app.forms import RegistrationForm, LoginForm
+from app.forms import RegistrationForm, LoginForm, PictureForm
 from app import app, db, bcrypt
-from app.models import User
+from app.models import User, Product, Picture
 from flask_login import login_user, logout_user, current_user
 
 subpages = {'home' : {"Home" : "/"}, 'about' : {"About" : "/about"}, 'gallery' : {"Gallery" : "/gallery"}}
@@ -17,11 +17,21 @@ def about():
     current = 'about'
     return render_template('about.html', subpages=subpages, current=current)
 
-images = ['tux.png' for i in range(10)]
+
 @app.route("/gallery")
 def gallery():
-    current = 'gallery'
-    return render_template('gallery.html', subpages=subpages, current=current, images=images)
+    product_id = 1
+    product = Product.query.get(product_id)
+    if product:
+        pictures = [picture.path for picture in product.pictures]
+        current = 'gallery'
+        if current_user.is_authenticated:
+            form = PictureForm()
+            return render_template('gallery.html', subpages=subpages, current=current, pictures=pictures, form=form)
+        return render_template('gallery.html', subpages=subpages, current=current, pictures=pictures)
+    else:
+        flash(f"Product {product_id} doesn't exist", 'alert')
+        return redirect('home')
 
 
 @app.route("/login", methods=['GET', 'POST'])
