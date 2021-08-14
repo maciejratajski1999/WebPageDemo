@@ -22,28 +22,12 @@ def about():
     current = 'about'
     return render_template('about.html', subpages=subpages, current=current)
 
-def save_picture(file_field_form):
-    picture_path = os.path.join(app.root_path, 'static/thumbnails', file_field_form.filename)
-    file_field_form.save(picture_path)
-    return "thumbnails/" + file_field_form.filename
-
 @app.route("/gallery", methods=['GET', 'POST'])
 def gallery():
     current = 'gallery'
     products = Product.query.all()
     pictures = [product.thumbnail for product in products]
-    if current_user.is_authenticated:
-        form = ProductForm()
-        if form.validate_on_submit():
-            if form.thumbnail.data:
-                thumbnail_path = save_picture(form.thumbnail.data)
-                new_product = Product(name=form.name.data, thumbnail=thumbnail_path)
-                db.session.add(new_product)
-                db.session.commit()
-                return redirect('gallery')
-        return render_template('gallery.html', subpages=subpages, current=current, pictures=pictures, form=form)
-    else:
-        return render_template('gallery.html', subpages=subpages, current=current, pictures=pictures)
+    return render_template('gallery.html', subpages=subpages, current=current, pictures=pictures)
 
 
 @app.route("/product", methods=['GET', 'POST'])
@@ -61,6 +45,26 @@ def product():
     else:
         flash(f"Product {product_id} doesn't exist", 'alert')
         return redirect('home')
+
+def save_picture(file_field_form):
+    picture_path = os.path.join(app.root_path, 'static/thumbnails', file_field_form.filename)
+    file_field_form.save(picture_path)
+    return "thumbnails/" + file_field_form.filename
+@app.route("/manage", methods=['GET', 'POST'])
+def manage():
+    if current_user.is_authenticated:
+        form = ProductForm()
+        products = Product.query.all()
+        pictures = [product.thumbnail for product in products]
+        if form.validate_on_submit():
+            if form.thumbnail.data:
+                thumbnail_path = save_picture(form.thumbnail.data)
+                new_product = Product(name=form.name.data, thumbnail=thumbnail_path)
+                db.session.add(new_product)
+                db.session.commit()
+                return redirect('manage')
+        return render_template('manage.html', subpages=subpages, pictures=pictures, form=form)
+    return render_template('home.html', subpages=subpages)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

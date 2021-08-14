@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block main %}
+    <h1>Manage products</h1>
+    <main>
+        <form method="POST"  enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+                <div class="add-picture">
+                    {% for item in form %}
+                        {% if item.id != 'csrf_token'%}
+                                {{item}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+        </form>
+    </main>
+{% endblock %}

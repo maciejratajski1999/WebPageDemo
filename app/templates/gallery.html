@@ -2,28 +2,14 @@
 {% block main %}
     <h1>Gallery</h1>
     <main>
-        {% if current_user.is_authenticated %}
-            <form method="POST"  enctype="multipart/form-data">
-        {% endif %}
+
 
         <div class="gallery">
             {% for picture in pictures %}
                 <img class="image" src={{url_for('static', filename=picture)}}>
             {% endfor %}
 
-            {% if form %}
-                {{ form.hidden_tag() }}
-                    <div class="add-picture">
-                    {% for item in form %}
-                        {% if item.id != 'csrf_token'%}
-                                {{item}}
-                        {% endif %}
-                    {% endfor %}
-                    </div>
-            {% endif %}
         </div>
-        {% if current_user.is_authenticated %}
-            </form>
-        {% endif %}
+
     </main>
 {% endblock %}
