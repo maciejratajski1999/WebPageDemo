@@ -40,3 +40,8 @@ class LoginForm(FlaskForm):
 class PictureForm(FlaskForm):
     picture = FileField(validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     submitpicture = SubmitField('Add new Picture')
+
+class ProductForm(FlaskForm):
+    name = StringField("Product Name", validators=[DataRequired()])
+    thumbnail = FileField(validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+    submitproduct = SubmitField('Add new Product')

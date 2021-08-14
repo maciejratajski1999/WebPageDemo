@@ -19,6 +19,7 @@ class Product(db.Model):
     id = db.Column(Integer, primary_key=True)
     name = db.Column(String(50), unique=True, nullable=False)
     pictures = db.relationship('Picture', backref='product', lazy=True)
+    thumbnail = db.Column(String, unique=False, nullable=False, default='tux.png')
 
     def __repr__(self):
         return f'<Product name={self.name!r}, id={self.id}>'
