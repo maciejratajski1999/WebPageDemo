@@ -29,12 +29,17 @@ div.product-container{
 }
 
 .product-link{
+    display: flex;
     width: 33.33%;
     font-size: large;
+    justify-content: center;
+    text-decoration: none;
+    font-size: large;
+    color: white;
 }
 
 
-.image:hover {
+.enlarging:hover {
     transition: all 0.2s ease-out;
     z-index: 1;
     transform: scale(2,2);

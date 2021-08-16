@@ -5,7 +5,7 @@ import string
 import random
 
 allowed_characters = string.ascii_letters + string.digits
-subpages = {'home': {"Home": "/"}, 'about': {"About": "/about"}, 'products': {"Products": "/products"}}
+subpages = {'home': {"Home": "/"}, 'about': {"About": "/about"}, 'products': {"Products": "/products"}, 'blog' : {'Blog' : '/blog'}}
 
 
 def save_picture(file_field_form, subdirectory):

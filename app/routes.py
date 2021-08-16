@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, send_from_directory
+from flask import render_template, flash, redirect, url_for, send_from_directory, request
 from app.forms import RegistrationForm, LoginForm, PictureForm, ProductForm
 from app.utils import *
 from flask_login import login_user, logout_user, current_user
@@ -30,26 +30,20 @@ def gallery():
 def products():
     current = 'products'
     products = Product.query.all()
-    products = [[product.id, product.name, product.thumbnail] for product in products]
+    products = [[str(product.id), product.name, product.thumbnail] for product in products]
     products = split_into_groups_of_n(objects=products, n=3)
     return render_template('products.html', subpages=subpages, current=current, products=products)
 
 
 @app.route("/product", methods=['GET', 'POST'])
 def product():
-    product_id = 1
-    product = Product.query.get(product_id)
-    if product:
-        pictures = [picture.path for picture in product.pictures]
-        current = 'gallery'
-        if current_user.is_authenticated:
-            form = PictureForm()
-            return render_template('gallery.html', subpages=subpages, current=current, pictures=pictures, form=form)
-        else:
-            return render_template('gallery.html', subpages=subpages, current=current, pictures=pictures)
-    else:
-        flash(f"Product {product_id} doesn't exist", 'alert')
-        return redirect('home')
+    current = "products"
+    product_id = int(request.args.get('product_id'))
+    pictures = Product.query.get(product_id).pictures
+    pictures = [[picture.path] for picture in pictures]
+    pictures = split_into_groups_of_n(pictures, n=3)
+    print(pictures)
+    return render_template('product.html', subpages=subpages, current=current, pictures=pictures)
 
 
 @app.route("/manage", methods=['GET', 'POST'])
