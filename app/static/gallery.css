@@ -3,7 +3,7 @@ div.gallery {
     width: 100%;
 }
 
-div.imagesbar{
+div.bar{
     float: left;
     display: flex;
     position: relative;
@@ -13,6 +13,12 @@ div.imagesbar{
     height: 100%;
     align-items: center;
 }
+.buttons{
+    padding-bottom: 5%;
+}
+
+div.product-container{
+}
 
 .image{
     display: inline;
@@ -20,6 +26,11 @@ div.imagesbar{
     position: relative;
     width: 30%;
     height: auto;
+}
+
+.product-link{
+    width: 33.33%;
+    font-size: large;
 }
 
 

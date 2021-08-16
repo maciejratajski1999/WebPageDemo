@@ -1,12 +1,10 @@
 from flask import render_template, flash, redirect, url_for, send_from_directory
 from app.forms import RegistrationForm, LoginForm, PictureForm, ProductForm
-from app import app, db, bcrypt
-from app.models import User, Product, Picture
 from app.utils import *
 from flask_login import login_user, logout_user, current_user
-from werkzeug.utils import secure_filename
 
-subpages = {'home' : {"Home" : "/"}, 'about' : {"About" : "/about"}, 'gallery' : {"Gallery" : "/gallery"}}
+
+subpages = {'home' : {"Home" : "/"}, 'about' : {"About" : "/about"}, 'products' : {"Products" : "/products"}}
 
 
 
@@ -25,9 +23,17 @@ def about():
 def gallery():
     current = 'gallery'
     products = Product.query.all()
-    pictures = [product.thumbnail for product in products]
-    pictures = split_into_groups_of_n(objects=pictures, n=3)
-    return render_template('gallery.html', subpages=subpages, current=current, pictures=pictures)
+    products = [[product.id, product.name, product.thumbnail] for product in products]
+    products = split_into_groups_of_n(objects=products, n=3)
+    return render_template('gallery.html', subpages=subpages, current=current, products=products)
+
+@app.route("/products", methods=['GET'])
+def products():
+    current = 'products'
+    products = Product.query.all()
+    products = [[product.id, product.name, product.thumbnail] for product in products]
+    products = split_into_groups_of_n(objects=products, n=3)
+    return render_template('products.html', subpages=subpages, current=current, products=products)
 
 
 @app.route("/product", methods=['GET', 'POST'])
@@ -56,10 +62,7 @@ def manage():
         pictures = [product.thumbnail for product in products]
         if form.validate_on_submit():
             if form.thumbnail.data:
-                thumbnail_path = save_picture(form.thumbnail.data, subdirectory='thumbnails')
-                new_product = Product(name=form.name.data, thumbnail=thumbnail_path)
-                db.session.add(new_product)
-                db.session.commit()
+                add_product(form)
                 return redirect('manage')
         return render_template('manage.html', subpages=subpages, pictures=pictures, form=form)
     return render_template('home.html', subpages=subpages)

@@ -3,13 +3,8 @@
     <h1>Gallery</h1>
     <main>
         <div class="gallery">
-            {% for group in pictures %}
-                <div class="imagesbar">
-                    {% for picture in group%}
-                            <img class="image" src={{url_for('static', filename=picture)}}>
-                    {% endfor %}
-                </div>
-            {% endfor %}
+            {% block gallery %}
+            {% endblock %}
         </div>
     </main>
 {% endblock %}

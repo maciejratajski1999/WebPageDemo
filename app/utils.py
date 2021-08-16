@@ -1,5 +1,5 @@
 from app import app, db, bcrypt
-from app.models import User
+from app.models import User, Product, Picture
 import os
 import string
 import random
@@ -18,6 +18,12 @@ def register_user(register_form):
     hashed_password = bcrypt.generate_password_hash(register_form.password.data).decode('utf-8')
     new_user = User(username=register_form.username.data, email=register_form.email.data, password=hashed_password)
     db.session.add(new_user)
+    db.session.commit()
+
+def add_product(product_form):
+    thumbnail_path = save_picture(product_form.thumbnail.data, subdirectory='thumbnails')
+    new_product = Product(name=product_form.name.data, thumbnail=thumbnail_path)
+    db.session.add(new_product)
     db.session.commit()
 
 def get_products():
