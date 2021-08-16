@@ -1,11 +1,18 @@
 from app import app, db, bcrypt
 from app.models import User
 import os
+import string
+import random
+
+allowed_characters = string.ascii_letters + string.digits
 
 def save_picture(file_field_form, subdirectory):
-    picture_path = os.path.join(app.root_path, f'static/{subdirectory}', file_field_form.filename)
+    _, f_ext = os.path.splitext(file_field_form.filename)
+    random_name = ''.join([random.choice(allowed_characters) for i in range(16)])
+    random_name = random_name + f_ext
+    picture_path = os.path.join(app.root_path, f'static/{subdirectory}', random_name)
     file_field_form.save(picture_path)
-    return f"{subdirectory}/" + file_field_form.filename
+    return f"{subdirectory}/" + random_name
 
 def register_user(register_form):
     hashed_password = bcrypt.generate_password_hash(register_form.password.data).decode('utf-8')

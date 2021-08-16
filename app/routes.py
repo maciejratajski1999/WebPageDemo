@@ -56,7 +56,7 @@ def manage():
         pictures = [product.thumbnail for product in products]
         if form.validate_on_submit():
             if form.thumbnail.data:
-                thumbnail_path = save_picture(form.thumbnail.data)
+                thumbnail_path = save_picture(form.thumbnail.data, subdirectory='thumbnails')
                 new_product = Product(name=form.name.data, thumbnail=thumbnail_path)
                 db.session.add(new_product)
                 db.session.commit()
