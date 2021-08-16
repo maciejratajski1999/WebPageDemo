@@ -1,10 +1,9 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, send_from_directory
 from app.forms import RegistrationForm, LoginForm, PictureForm, ProductForm
 from app import app, db, bcrypt
 from app.models import User, Product, Picture
+from app.utils import *
 from flask_login import login_user, logout_user, current_user
-import os
-from PIL import Image
 from werkzeug.utils import secure_filename
 
 subpages = {'home' : {"Home" : "/"}, 'about' : {"About" : "/about"}, 'gallery' : {"Gallery" : "/gallery"}}
@@ -27,6 +26,7 @@ def gallery():
     current = 'gallery'
     products = Product.query.all()
     pictures = [product.thumbnail for product in products]
+    pictures = split_into_groups_of_n(objects=pictures, n=3)
     return render_template('gallery.html', subpages=subpages, current=current, pictures=pictures)
 
 
@@ -46,10 +46,8 @@ def product():
         flash(f"Product {product_id} doesn't exist", 'alert')
         return redirect('home')
 
-def save_picture(file_field_form):
-    picture_path = os.path.join(app.root_path, 'static/thumbnails', file_field_form.filename)
-    file_field_form.save(picture_path)
-    return "thumbnails/" + file_field_form.filename
+
+
 @app.route("/manage", methods=['GET', 'POST'])
 def manage():
     if current_user.is_authenticated:
@@ -88,10 +86,7 @@ def register():
         return redirect('home')
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
+        register_user(form)
         flash(f"Registered: {form.username.data}", 'alert')
         return redirect(url_for('home'))
     return render_template('register.html', subpages=subpages, form=form)
@@ -100,3 +95,8 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'tux.png', mimetype='image/vnd.microsoft.icon')
