@@ -4,20 +4,18 @@ from app.utils import *
 from flask_login import login_user, logout_user, current_user
 
 
-subpages = {'home' : {"Home" : "/"}, 'about' : {"About" : "/about"}, 'products' : {"Products" : "/products"}}
-
-
-
 @app.route("/")
 @app.route("/home")
 def home():
     current = 'home'
     return render_template('home.html', subpages=subpages, current=current)
 
+
 @app.route("/about")
 def about():
     current = 'about'
     return render_template('about.html', subpages=subpages, current=current)
+
 
 @app.route("/gallery", methods=['GET', 'POST'])
 def gallery():
@@ -26,6 +24,7 @@ def gallery():
     products = [[product.id, product.name, product.thumbnail] for product in products]
     products = split_into_groups_of_n(objects=products, n=3)
     return render_template('gallery.html', subpages=subpages, current=current, products=products)
+
 
 @app.route("/products", methods=['GET'])
 def products():
@@ -53,7 +52,6 @@ def product():
         return redirect('home')
 
 
-
 @app.route("/manage", methods=['GET', 'POST'])
 def manage():
     if current_user.is_authenticated:
@@ -66,6 +64,7 @@ def manage():
                 return redirect('manage')
         return render_template('manage.html', subpages=subpages, pictures=pictures, form=form)
     return render_template('home.html', subpages=subpages)
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -82,6 +81,7 @@ def login():
             flash("Login unsuccessful", 'alert')
     return render_template('login.html', subpages=subpages, form=form)
 
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -94,10 +94,12 @@ def register():
         return redirect(url_for('home'))
     return render_template('register.html', subpages=subpages, form=form)
 
+
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
 
 @app.route('/favicon.ico')
 def favicon():

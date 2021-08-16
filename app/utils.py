@@ -5,6 +5,8 @@ import string
 import random
 
 allowed_characters = string.ascii_letters + string.digits
+subpages = {'home': {"Home": "/"}, 'about': {"About": "/about"}, 'products': {"Products": "/products"}}
+
 
 def save_picture(file_field_form, subdirectory):
     _, f_ext = os.path.splitext(file_field_form.filename)
@@ -14,11 +16,13 @@ def save_picture(file_field_form, subdirectory):
     file_field_form.save(picture_path)
     return f"{subdirectory}/" + random_name
 
+
 def register_user(register_form):
     hashed_password = bcrypt.generate_password_hash(register_form.password.data).decode('utf-8')
     new_user = User(username=register_form.username.data, email=register_form.email.data, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
+
 
 def add_product(product_form):
     thumbnail_path = save_picture(product_form.thumbnail.data, subdirectory='thumbnails')
@@ -26,9 +30,10 @@ def add_product(product_form):
     db.session.add(new_product)
     db.session.commit()
 
+
 def get_products():
     pass
 
-def split_into_groups_of_n(objects, n=3):
-    return [objects[i:i+n] for i in range(0, len(objects), n)]
 
+def split_into_groups_of_n(objects, n=3):
+    return [objects[i:i + n] for i in range(0, len(objects), n)]

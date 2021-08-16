@@ -15,7 +15,6 @@ class RegistrationForm(FlaskForm):
                                      validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
 
-
     def validate_username(self, field):
         username_taken = User.query.filter_by(username=field.data).first()
         if username_taken:
@@ -27,9 +26,6 @@ class RegistrationForm(FlaskForm):
             raise ValidationError("email already taken")
 
 
-
-
-
 class LoginForm(FlaskForm):
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
@@ -37,9 +33,11 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+
 class PictureForm(FlaskForm):
     picture = FileField(validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     submitpicture = SubmitField('Add new Picture')
+
 
 class ProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired()])
