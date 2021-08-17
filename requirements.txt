@@ -47,7 +47,6 @@ launchpadlib==1.10.13
 lazr.restfulclient==0.14.2
 lazr.uri==1.0.5
 lazy-object-proxy==1.6.0
-louis==3.16.0
 lru-dict==1.1.7
 macaroonbakery==1.3.1
 MarkupSafe==2.0.1
