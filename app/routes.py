@@ -29,9 +29,7 @@ def gallery():
 @app.route("/products", methods=['GET'])
 def products():
     current = 'products'
-    products = Product.query.all()
-    products = [[str(product.id), product.name, product.thumbnail] for product in products]
-    products = split_into_groups_of_n(objects=products, n=3)
+    products = get_products_in_group_of_n(3)
     return render_template('products.html', subpages=subpages, current=current, products=products)
 
 
@@ -49,14 +47,19 @@ def product():
 @app.route("/manage", methods=['GET', 'POST'])
 def manage():
     if current_user.is_authenticated:
-        form = ProductForm()
+        product_form = ProductForm()
+        picture_form = PictureForm()
+        for pic in picture_form:
+            print(pic)
         products = Product.query.all()
-        pictures = [product.thumbnail for product in products]
-        if form.validate_on_submit():
-            if form.thumbnail.data:
-                add_product(form)
+        products = [product for product in products]
+        if product_form.validate_on_submit():
+            if product_form.thumbnail.data:
+                add_product(product_form)
                 return redirect('manage')
-        return render_template('manage.html', subpages=subpages, pictures=pictures, form=form)
+        if picture_form.validate_on_submit():
+            pass
+        return render_template('manage.html', subpages=subpages, products=products, product_form=product_form, picture_form=picture_form)
     return render_template('home.html', subpages=subpages)
 
 
@@ -67,26 +70,13 @@ def login():
         return redirect('home')
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             return redirect(url_for('home'))
         else:
             flash("Login unsuccessful", 'alert')
     return render_template('login.html', subpages=subpages, form=form)
-
-
-@app.route("/register", methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        flash(f"Already logged in as {current_user.username}", 'alert')
-        return redirect('home')
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        register_user(form)
-        flash(f"Registered: {form.username.data}", 'alert')
-        return redirect(url_for('home'))
-    return render_template('register.html', subpages=subpages, form=form)
 
 
 @app.route("/logout")

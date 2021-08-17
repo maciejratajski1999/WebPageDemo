@@ -30,9 +30,17 @@ def add_product(product_form):
     db.session.add(new_product)
     db.session.commit()
 
+def add_picture(picture_form):
+    picture_path = save_picture(picture_form.picture.data, subdirectory='pictures')
+    new_picture = Picture(product_id=picture_form.product_id, title=picture_form.title.data, thumbnail=picture_path)
+    db.session.add(new_picture)
+    db.session.commit()
 
-def get_products():
-    pass
+def get_products_in_group_of_n(n):
+    products = Product.query.all()
+    products = [[str(product.id), product.name, product.thumbnail] for product in products]
+    products = split_into_groups_of_n(objects=products, n=3)
+    return products
 
 
 def split_into_groups_of_n(objects, n=3):

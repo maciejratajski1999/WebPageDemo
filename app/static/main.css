@@ -1,6 +1,7 @@
 @import "gallery.css";
 @import "navbar.css";
 @import "register.css";
+@import "manage.css";
 
 html {
     background-color: rgb(206, 100, 90);
