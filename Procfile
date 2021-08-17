@@ -1,1 +1,1 @@
-web: gunicorn
+web: heroku run python3.9 run.py
