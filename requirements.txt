@@ -20,7 +20,6 @@ cytoolz==0.11.0
 dataclassy==0.10.4
 dbus-python==1.2.16
 distro==1.5.0
-distro-info==1.0
 dnspython==2.1.0
 eip712==0.1.0
 email-validator==1.1.3
