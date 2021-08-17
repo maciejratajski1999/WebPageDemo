@@ -1,0 +1,29 @@
+nav ul{
+    background-color: #b30000;
+    overflow: hidden;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #000000;
+}
+nav li{
+    display: inline;
+}
+nav li a {
+    float: left;
+    padding: 15px 20px;
+    transition: background-color 0.5s ease;
+    text-decoration: none;
+    font-size: large;
+    text-align: center;
+    color: white;
+}
+nav li a.current {
+    background-color: rgb(255, 255, 255, 0.3);
+}
+nav li a.login {
+    float: right;
+}
+nav li a:hover{
+    background-color: #951a1a
+}
