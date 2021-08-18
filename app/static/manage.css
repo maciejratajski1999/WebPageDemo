@@ -41,3 +41,9 @@ div.manager {
 div.manager input{
     width: auto;
 }
+.invisible {
+    visibility: hidden;
+    position: relative;
+    width: 0px;
+    height: 0px;
+}

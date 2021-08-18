@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, send_from_directory, request
-from app.forms import RegistrationForm, LoginForm, PictureForm, ProductForm
+from app.forms import *
 from app.utils import *
 from flask_login import login_user, logout_user, current_user
 
@@ -49,15 +49,16 @@ def manage():
         product_form = ProductForm()
         products = Product.query.all()
         products = [product for product in products]
-        picture_forms = [[PictureForm(), product.id] for product in products]
+        picture_forms = {product.id : picture_form_id(product_id=product.id) for product in products}
         if product_form.validate_on_submit():
             if product_form.thumbnail.data:
                 add_product(product_form)
                 return redirect('manage')
-        for picture_form in picture_forms:
-            picture_form[0].product_id.data = picture_form[1]
-            if picture_form[0].validate_on_submit():
-                add_picture(picture_form[0])
+        for picture_form in picture_forms.values():
+            if picture_form.validate_on_submit():
+                for item in picture_form:
+                    print(item, item.data)
+                add_picture(picture_form)
                 return redirect(url_for('manage'))
         return render_template('manage.html', subpages=subpages, products=products, product_form=product_form, picture_forms=picture_forms)
     return render_template('home.html', subpages=subpages)

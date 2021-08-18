@@ -22,14 +22,15 @@
                             </th>
                             <th>
                                 <form class="picture" method="POST"  enctype="multipart/form-data">
-                                    {{ picture_forms[product.id - 1][0].hidden_tag() }}
-                                    <div class="add-picture manager">
-                                        {% for item in picture_forms[product.id - 1][0] %}
+                                    {% set form = picture_forms[product.id]%}
+                                    {{ form.hidden_tag() }}
+                                        {% for item in form %}
                                             {% if item.id not in ['csrf_token', 'product_id'] %}
                                                 {{item}}
+                                            {% elif item.id == 'product_id' %}
+                                                <div class="invisible">{{item}}</div>
                                             {% endif %}
                                         {% endfor %}
-                                    </div>
                                 </form>
                             </th>
                         </tr>

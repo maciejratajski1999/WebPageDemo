@@ -35,10 +35,23 @@ class LoginForm(FlaskForm):
 
 
 class PictureForm(FlaskForm):
-    product_id = IntegerField('Product ID', validators=[DataRequired()])
+    product_id = IntegerField('Product ID', validators=[DataRequired()], default=0)
     picture = FileField(validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     title = StringField('Title', validators=[DataRequired()])
     submitpicture = SubmitField('Add new Picture')
+
+def picture_form_id(product_id):
+
+    class PictureFormID(PictureForm):
+        pass
+
+    PictureFormID.product_id = IntegerField('Product ID', validators=[DataRequired()], default=product_id)
+    PictureFormID.picture = FileField(validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+    PictureFormID.title = StringField('Title', validators=[DataRequired()])
+    PictureFormID.submitpicture = SubmitField('Add new Picture')
+
+    return PictureFormID()
+
 
 
 class ProductForm(FlaskForm):
