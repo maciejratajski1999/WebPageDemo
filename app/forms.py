@@ -58,3 +58,7 @@ class ProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired()])
     thumbnail = FileField(validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     submitproduct = SubmitField('Add new Product')
+
+class ApplyChangesForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Apply Changes')

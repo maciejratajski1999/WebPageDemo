@@ -56,11 +56,17 @@ def manage():
                 return redirect('manage')
         for picture_form in picture_forms.values():
             if picture_form.validate_on_submit():
-                for item in picture_form:
-                    print(item, item.data)
                 add_picture(picture_form)
                 return redirect(url_for('manage'))
-        return render_template('manage.html', subpages=subpages, products=products, product_form=product_form, picture_forms=picture_forms)
+        apply_changes_form = ApplyChangesForm()
+        if apply_changes_form.validate_on_submit():
+            if verify_password(current_user, apply_changes_form.password.data):
+                new_images_count = len(save_images())
+                flash(f"success, {new_images_count} new images saved in database", 'alert')
+            else:
+                flash(f"Wrong password for {current_user.username}", 'alert')
+
+        return render_template('manage.html', subpages=subpages, products=products, product_form=product_form, picture_forms=picture_forms, apply_changes_form=apply_changes_form)
     return render_template('home.html', subpages=subpages)
 
 

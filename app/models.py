@@ -1,7 +1,6 @@
 from app import db, login_manager
-from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy import Integer, String, ForeignKey, LargeBinary
 from flask_login import UserMixin
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -35,3 +34,7 @@ class Picture(db.Model):
 
     def __repr__(self):
         return f'<Picture for Product.id={self.product_id}, path={self.path}>'
+
+class Image(db.Model):
+    path = db.Column(String, unique=False, nullable=False, primary_key=True)
+    file = db.Column(LargeBinary, nullable=False)

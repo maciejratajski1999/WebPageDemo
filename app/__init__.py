@@ -10,4 +10,12 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 
+from app.utils import generate_images
+
+try:
+    generate_images()
+except:
+    print(f"no database present at {app.config['SQLALCHEMY_DATABASE_URI']}")
+
+
 from app import routes

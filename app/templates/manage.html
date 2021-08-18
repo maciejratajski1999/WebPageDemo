@@ -48,5 +48,18 @@
                     {% endfor %}
                 </div>
         </form>
+        <form method="POST"  enctype="multipart/form-data">
+            {{ apply_changes_form.hidden_tag() }}
+                <div class="add-picture apply-changes">
+                    {% for item in apply_changes_form %}
+                        {% if item.id != 'csrf_token'%}
+                            {% if item.id == 'password' %}
+                                {{item.label}}
+                            {% endif%}
+                            {{item}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+        </form>
     </main>
 {% endblock %}
