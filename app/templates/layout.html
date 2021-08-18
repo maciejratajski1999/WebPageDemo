@@ -17,9 +17,9 @@
       {% for class, hyperlinks in subpages.items() %}
         {% for header, link in hyperlinks.items() %}
           {% if class == current %}
-            <li><a class="current" href={{link}}>{{header}}</a></li>
+            <li class="current"><a  href={{link}}>{{header}}</a></li>
           {% else %}
-            <li><a class="other" href={{link}}>{{header}}</a></li>
+            <li class="other" ><a href={{link}}>{{header}}</a></li>
           {% endif %}
         {% endfor %}
       {% endfor %}
@@ -32,14 +32,18 @@
     </ul>
   </nav>
 {% endblock %}
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class={{category}}>{{message}}</div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
-{% block main %}
-{% endblock %}
+{% block content%}
+  <div class="content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class={{category}}>{{message}}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block main %}
+    {% endblock %}
+  </div>
+{% endblock%}
 </body>
 </html>

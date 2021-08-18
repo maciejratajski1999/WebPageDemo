@@ -2,13 +2,17 @@
 @import "navbar.css";
 @import "register.css";
 @import "manage.css";
+:root {
+  --bg: rgb(206, 100, 90);
+  --nav: rgba(var(--bg), 0.5);
+  --white: #ffffff;
+}
 
 html {
-    background-color: rgb(206, 100, 90);
+    background-color: var(--bg);
 }
 h1 {
-    position: relative;
-    top: 10px;
+    position: static;
     text-align: center;
 }
 main {
@@ -25,4 +29,8 @@ main {
 
 p {
     padding: 15px 20px;
+}
+.content {
+        position: relative;
+        top: 100px;
 }
