@@ -7,5 +7,10 @@
                 <img class="image enlarging" src={{url_for('static', filename=picture[0])}}>
             {% endfor %}
         </div>
+        <div class="bar">
+            {% for picture in picture_group%}
+                <h3 class="image picture-label labels">{{picture[1]}}</h3>
+            {% endfor %}
+        </div>
     {% endfor %}
 {% endblock %}

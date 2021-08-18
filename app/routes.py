@@ -38,7 +38,7 @@ def product():
     current = "products"
     product_id = int(request.args.get('product_id'))
     pictures = Product.query.get(product_id).pictures
-    pictures = [[picture.path] for picture in pictures]
+    pictures = [[picture.path, picture.title] for picture in pictures]
     pictures = split_into_groups_of_n(pictures, n=3)
     return render_template('product.html', subpages=subpages, current=current, pictures=pictures)
 

@@ -13,7 +13,7 @@ div.bar{
     height: 100%;
     align-items: center;
 }
-.buttons{
+.labels{
     padding-bottom: 5%;
 }
 
@@ -23,6 +23,7 @@ div.product-container{
 .image{
     display: inline;
     padding: 1% 2%;
+    padding-bottom: 0px;
     position: relative;
     width: 30%;
     height: auto;
@@ -37,7 +38,13 @@ div.product-container{
     font-size: large;
     color: white;
 }
-
+.picture-label {
+    display: flex;
+    position: relative;
+    width: 33.33%;
+    justify-content: center;
+    text-decoration: none;
+}
 
 .enlarging:hover {
     transition: all 0.2s ease-out;
