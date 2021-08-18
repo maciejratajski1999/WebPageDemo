@@ -3,6 +3,8 @@ from app.models import User, Product, Picture, Image
 import os
 import string
 import random
+import base64
+from PIL import Image as PilImage
 
 allowed_characters = string.ascii_letters + string.digits
 subpages = {'home': {"Home": "/"}, 'about': {"About": "/about"}, 'products': {"Products": "/products"}, 'blog' : {'Blog' : '/blog'}}
@@ -15,11 +17,10 @@ def add_image(path, file):
     return image
 
 def save_picture(file_field_form, subdirectory):
-    _, f_ext = os.path.splitext(file_field_form.filename)
-    random_name = ''.join([random.choice(allowed_characters) for i in range(16)])
-    random_name = random_name + f_ext
+    image = PilImage.open(file_field_form)
+    random_name = ''.join([random.choice(allowed_characters) for i in range(16)]) + '.png'
     picture_path = os.path.join(app.root_path, f'static/{subdirectory}', random_name)
-    file_field_form.save(picture_path)
+    image.save(picture_path)
     path = f"{subdirectory}/" + random_name
     return path
 
@@ -57,16 +58,23 @@ def generate_images():
     static_files = list(os.listdir('app/static/pictures')) + list(os.listdir('app/static/thumbnails'))
     for image in Image.query.all():
         if os.path.basename(image.path) not in static_files:
-            # print(f"{image.path}: NIE MA MNIE")
+            print(f"{image.path}: NIE MA MNIE")
             generate_from_image(image)
         else:
             continue
-            # print(f"{image.path}: jestem")
+            print(f"{image.path}: jestem")
 
 def generate_from_image(image):
     path = os.path.join(app.root_path, f'static/{image.path}')
-    with open(path, 'w') as new_image:
-        new_image.write(image.file)
+    with open(path, 'wb') as new_image:
+        img_byte_code = decode_binary_to_img(image.file)
+        new_image.write(img_byte_code)
+
+def decode_binary_to_img(binary):
+    decoded_b64 = b"".join([bytes(chr(int(binary[i:i + 8], 2)), "utf-8") for i in range(0, len(binary), 8)])
+    byte_code = base64.b64decode(decoded_b64)
+    return byte_code
+
 
 def save_images():
     subdirectories = ['pictures', 'thumbnails']
@@ -78,9 +86,15 @@ def save_images():
             path = os.path.join(subdirectory, filename)
             if path not in images_paths:
                 full_path = os.path.join(f'app/static/{path}')
-                with open(full_path, 'rb') as file:
-                    images.append(add_image(path=path, file=file.read()))
+                file_binary = convert_img_to_binary(full_path)
+                images.append(add_image(path=path, file=file_binary))
     return images
+
+def convert_img_to_binary(path):
+    with open(path, "rb") as file:
+        encoded_base64 = base64.b64encode(file.read())
+        encoded_binary = "".join([format(n, '08b') for n in encoded_base64])
+        return bytes(encoded_binary.encode('utf-8'))
 
 def verify_password(user, password):
     return bcrypt.check_password_hash(user.password, password)
