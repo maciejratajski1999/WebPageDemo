@@ -56,6 +56,7 @@ def split_into_groups_of_n(objects, n=3):
 
 def generate_images():
     static_files = list(os.listdir('app/static/pictures')) + list(os.listdir('app/static/thumbnails'))
+    static_files = [file for file in static_files if os.path.splitext(file)[1] == '.png']
     for image in Image.query.all():
         if os.path.basename(image.path) not in static_files:
             print(f"{image.path}: NIE MA MNIE")
