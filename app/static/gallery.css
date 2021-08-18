@@ -39,11 +39,13 @@ div.product-container{
     color: white;
 }
 .picture-label {
-    display: flex;
+    display: inline;
     position: relative;
-    width: 33.33%;
+    width: 100%;
     justify-content: center;
     text-decoration: none;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 .enlarging:hover {
@@ -62,3 +64,16 @@ div.product-container{
 #submitpicture {
     margin-top: 10px;
 }
+
+h3{
+
+}
+
+.label {
+    position: relative;
+    width: 33.3%;
+    vertical-align: top;
+    text-align: center;
+    padding-bottom: 6%;
+}
+

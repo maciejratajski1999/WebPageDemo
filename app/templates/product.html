@@ -9,7 +9,9 @@
         </div>
         <div class="bar">
             {% for picture in picture_group%}
-                <h3 class="image picture-label labels">{{picture[1]}}</h3>
+                <div class="label">
+                    <h3 class="image picture-label labels">{{picture[1]}}</h3>
+                </div>
             {% endfor %}
         </div>
     {% endfor %}
