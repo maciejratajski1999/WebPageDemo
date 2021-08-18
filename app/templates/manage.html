@@ -15,12 +15,17 @@
                         <tr class="product-panel">
                             <th class="id">{{product.id}}</th>
                             <th>{{product.name}}</th>
-                            <th>{{product.pictures}}</th>
-                            <th><form class="picture" method="POST"  enctype="multipart/form-data">
-                                    {{ picture_form.hidden_tag() }}
+                            <th>
+                                {% for picture in product.pictures %}
+                                    <a href={{ url_for('static', filename=picture.path) }}>{{ picture.title }};</a>
+                                {% endfor %}
+                            </th>
+                            <th>
+                                <form class="picture" method="POST"  enctype="multipart/form-data">
+                                    {{ picture_forms[product.id - 1][0].hidden_tag() }}
                                     <div class="add-picture manager">
-                                        {% for item in picture_form %}
-                                            {% if item.id not in ['csrf_token']%}
+                                        {% for item in picture_forms[product.id - 1][0] %}
+                                            {% if item.id not in ['csrf_token', 'product_id'] %}
                                                 {{item}}
                                             {% endif %}
                                         {% endfor %}

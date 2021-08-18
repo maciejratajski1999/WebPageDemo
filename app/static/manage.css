@@ -36,5 +36,8 @@ form.picture{
 
 div.manager {
     padding: 0px 0px;
+    display: block;
+}
+div.manager input{
     width: auto;
 }

@@ -40,7 +40,6 @@ def product():
     pictures = Product.query.get(product_id).pictures
     pictures = [[picture.path] for picture in pictures]
     pictures = split_into_groups_of_n(pictures, n=3)
-    print(pictures)
     return render_template('product.html', subpages=subpages, current=current, pictures=pictures)
 
 
@@ -48,18 +47,19 @@ def product():
 def manage():
     if current_user.is_authenticated:
         product_form = ProductForm()
-        picture_form = PictureForm()
-        for pic in picture_form:
-            print(pic)
         products = Product.query.all()
         products = [product for product in products]
+        picture_forms = [[PictureForm(), product.id] for product in products]
         if product_form.validate_on_submit():
             if product_form.thumbnail.data:
                 add_product(product_form)
                 return redirect('manage')
-        if picture_form.validate_on_submit():
-            pass
-        return render_template('manage.html', subpages=subpages, products=products, product_form=product_form, picture_form=picture_form)
+        for picture_form in picture_forms:
+            picture_form[0].product_id.data = picture_form[1]
+            if picture_form[0].validate_on_submit():
+                add_picture(picture_form[0])
+                return redirect(url_for('manage'))
+        return render_template('manage.html', subpages=subpages, products=products, product_form=product_form, picture_forms=picture_forms)
     return render_template('home.html', subpages=subpages)
 
 
