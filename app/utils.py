@@ -99,3 +99,16 @@ def convert_img_to_binary(path):
 
 def verify_password(user, password):
     return bcrypt.check_password_hash(user.password, password)
+
+def delete_product(product_id):
+    product = Product.query.get(product_id)
+    db.session.delete(product)
+    db.session.commit()
+
+def delete_picture(picture_path):
+    picture = Picture.query.get(picture_path)
+    image = Image.query.get(picture_path)
+    if image:
+        db.session.delete(image)
+    db.session.delete(picture)
+    db.session.commit()
