@@ -13,7 +13,20 @@
                     </tr>
                     {% for product in products %}
                         <tr class="product-panel">
-                            <th class="id">{{product.id}}</th>
+                            <th class="id">
+                                <form class="delete-product" method="POST"  enctype="multipart/form-data">
+                                    {{product.id}}
+                                    {% set delete_form = delete_forms[product.id] %}
+                                    {{ delete_form.hidden_tag() }}
+                                        {% for item in delete_form %}
+                                            {% if item.id not in ['csrf_token', 'product_id'] %}
+                                                {{item}}
+                                            {% elif item.id == 'product_id' %}
+                                                <div class="invisible">{{item}}</div>
+                                            {% endif %}
+                                        {% endfor %}
+                                </form>
+                            </th>
                             <th>{{product.name}}</th>
                             <th>
                                 {% for picture in product.pictures %}
@@ -22,7 +35,7 @@
                             </th>
                             <th>
                                 <form class="picture" method="POST"  enctype="multipart/form-data">
-                                    {% set form = picture_forms[product.id]%}
+                                    {% set form = picture_forms[product.id] %}
                                     {{ form.hidden_tag() }}
                                         {% for item in form %}
                                             {% if item.id not in ['csrf_token', 'product_id'] %}

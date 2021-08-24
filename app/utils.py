@@ -57,13 +57,31 @@ def split_into_groups_of_n(objects, n=3):
 def generate_images():
     static_files = list(os.listdir('app/static/pictures')) + list(os.listdir('app/static/thumbnails'))
     static_files = [file for file in static_files if os.path.splitext(file)[1] == '.png']
-    for image in Image.query.all():
+    images = Image.query.all()
+    for image in images:
         if os.path.basename(image.path) not in static_files:
             print(f"{image.path}: NIE MA MNIE")
             generate_from_image(image)
         else:
-            continue
             print(f"{image.path}: jestem")
+            continue
+
+def delete_unused_images():
+    pictures_path = 'app/static/pictures'
+    pictures = list(os.listdir(pictures_path))
+    pictures = [os.path.join(pictures_path, picture) for picture in pictures]
+    thumbnails_path = 'app/static/thumbnails'
+    thumbnails = list(os.listdir(thumbnails_path))
+    thumbnails = [os.path.join(thumbnails_path, thumbnail) for thumbnail in thumbnails]
+    static_files = pictures + thumbnails
+    static_files = [file for file in static_files if os.path.splitext(file)[1] == '.png']
+    images = [image.path for image in Image.query.all()]
+    for filename in static_files:
+        subpath, file = os.path.split(filename)
+        image_path = os.path.join(os.path.split(subpath)[1], file)
+        if image_path not in images:
+            print(filename + " nieuywany, usuwam")
+            os.remove(filename)
 
 def generate_from_image(image):
     path = os.path.join(app.root_path, f'static/{image.path}')
@@ -81,14 +99,16 @@ def save_images():
     subdirectories = ['pictures', 'thumbnails']
     images_paths = [image.path for image in Image.query.all()]
     images = []
+    valid_paths = [picture.path for picture in Picture.query.all()] + [product.thumbnail for product in Product.query.all()]
     for subdirectory in subdirectories:
         full_path = os.path.join(app.root_path, f'static/{subdirectory}')
         for filename in os.listdir(full_path):
             path = os.path.join(subdirectory, filename)
-            if path not in images_paths:
-                full_path = os.path.join(f'app/static/{path}')
-                file_binary = convert_img_to_binary(full_path)
-                images.append(add_image(path=path, file=file_binary))
+            if path in valid_paths:
+                if path not in images_paths:
+                    full_path = os.path.join(f'app/static/{path}')
+                    file_binary = convert_img_to_binary(full_path)
+                    images.append(add_image(path=path, file=file_binary))
     return images
 
 def convert_img_to_binary(path):
@@ -100,15 +120,31 @@ def convert_img_to_binary(path):
 def verify_password(user, password):
     return bcrypt.check_password_hash(user.password, password)
 
-def delete_product(product_id):
+def delete_product_by_id(product_id):
     product = Product.query.get(product_id)
+    thumbnail = get_image(product.thumbnail)
+    if thumbnail:
+        delete_image(thumbnail)
+    for picture in product.pictures:
+        delete_picture(picture)
     db.session.delete(product)
     db.session.commit()
 
-def delete_picture(picture_path):
-    picture = Picture.query.get(picture_path)
-    image = Image.query.get(picture_path)
+def delete_picture(picture):
+    image = get_image(picture.path)
     if image:
-        db.session.delete(image)
+        delete_image(image)
     db.session.delete(picture)
     db.session.commit()
+
+def delete_image(image):
+    db.session.delete(image)
+    db.session.commit()
+
+def get_picture(picture_path):
+    picture = Picture.query.get(picture_path)
+    return picture
+
+def get_image(picture_path):
+    image = Image.query.get(picture_path)
+    return image

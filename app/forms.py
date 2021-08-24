@@ -62,3 +62,18 @@ class ProductForm(FlaskForm):
 class ApplyChangesForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Apply Changes')
+
+class DeleteProductForm(FlaskForm):
+    product_id = IntegerField('Product ID', validators=[DataRequired()], default=0)
+    confirm = BooleanField('Delete this product')
+    delete_product = SubmitField('Delete product')
+
+def delete_product_id(product_id):
+
+    class DeleteProductID(DeleteProductForm):
+        pass
+
+    DeleteProductID.product_id = IntegerField('Product ID', validators=[DataRequired()], default=product_id)
+    DeleteProductID.delete_product = SubmitField('Delete product')
+
+    return DeleteProductID()
