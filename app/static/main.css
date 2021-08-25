@@ -1,0 +1,39 @@
+@import "gallery.css";
+@import "navbar.css";
+@import "register.css";
+@import "manage.css";
+@import "blog.css";
+:root {
+  --bg: rgb(206, 100, 90);
+  --nav: rgba(var(--bg), 0.5);
+  --white: #ffffff;
+}
+
+html {
+    background-color: var(--bg);
+}
+h1 {
+    position: static;
+    text-align: center;
+}
+main {
+    position: absolute;
+    width: 60%;
+    left: 20%;
+    right: 20%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.2) 65%, rgba(255,255,255,0.3) 100%);
+    border-style: outset;
+    border-color: #b30000;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    box-shadow: 18px 18px 45px 11px #100505;
+    border-radius: 20px;
+}
+
+p {
+    padding: 15px 20px;
+}
+.content {
+        position: relative;
+        top: 100px;
+}

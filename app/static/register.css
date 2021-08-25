@@ -1,0 +1,47 @@
+form {
+    padding: 10px 15px;
+}
+div.form {
+    display: grid;
+    padding: 15px 5px;
+}
+#remember-me{
+    display: flex;
+}
+
+input {
+    background-color: pink;
+    width: 250px;
+}
+#remember {
+    max-width: 20px;
+}
+#submit{
+    height: 30px;
+    width: 259px;
+}
+
+div.alert {
+    text-shadow: 2px 2px 7px red;
+    color: white;
+    font-size: 150%;
+    display: block;
+}
+
+a.error{
+    display: block;
+    width: 254px;
+    padding: 1px 1px;
+    background-color: rgb(255, 0, 0, 0.2);
+    border-style: solid;
+    border-color: red;
+    border-width: 1px;
+    color: black;
+    font-size: small;
+}
+
+div.flash-messages {
+    padding: 15px;
+    position: absolute;
+    z-index: 8;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
+  {% if title %}
+    <title>WebPage {{title}}</title>
+  {% else %}
+    <title>WebPage</title>
+  {% endif%}
+
+</head>
+<body>
+{% block navbar %}
+  <nav>
+    <ul>
+      {% for class, hyperlinks in subpages.items() %}
+        {% for header, link in hyperlinks.items() %}
+          {% if class == current %}
+            <li class="current"><a  href={{link}}>{{header}}</a></li>
+          {% else %}
+            <li class="other" ><a href={{link}}>{{header}}</a></li>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+      {% if current_user.is_authenticated %}
+        <li><a class="login" href="/logout">Logout</a></li>
+        <li><a class="login" href="/manage">Manage</a></li>
+      {% else %}
+        <li><a class="login" href="/login">Login</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endblock %}
+{% block content%}
+  <div class="content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      <div class="flash-messages">
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class={{category}}>{{message}}</div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    {% endwith %}
+    {% block main %}
+    {% endblock %}
+  </div>
+{% endblock%}
+</body>
+</html>

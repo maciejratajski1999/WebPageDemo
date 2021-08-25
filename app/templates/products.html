@@ -1,0 +1,16 @@
+{% extends "gallery.html" %}
+{% block gallery %}
+
+    {% for product_group in products %}
+        <div class="bar">
+            {% for product in product_group%}
+                <img class="image enlarging" src={{url_for('static', filename=product[2])}}>
+            {% endfor %}
+        </div>
+        <div class="bar labels">
+            {% for product in product_group %}
+                <a class="image product-link enlarging" href={{"/product?product_id=" + product[0]}}>{{product[1]}}</a>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,17 @@
+textarea#content {
+    position: relative;
+    width: 100%;
+
+}
+
+form.blog {
+    position: relative;
+    width: 90%;
+    left: 5%;
+    float: left;
+    overflow: hidden;
+}
+
+form.blog div.form input{
+    display: block;
+}

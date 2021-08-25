@@ -1,0 +1,79 @@
+div.gallery {
+    position: relative;
+    width: 100%;
+}
+
+div.bar{
+    float: left;
+    display: flex;
+    position: relative;
+    left: 5%;
+    right: 5%;
+    width: 90%;
+    height: 100%;
+    align-items: center;
+}
+.labels{
+    padding-bottom: 5%;
+}
+
+div.product-container{
+}
+
+.image{
+    display: inline;
+    padding: 1% 2%;
+    padding-bottom: 0px;
+    position: relative;
+    width: 30%;
+    height: auto;
+}
+
+.product-link{
+    display: flex;
+    width: 33.33%;
+    font-size: large;
+    justify-content: center;
+    text-decoration: none;
+    font-size: large;
+    color: white;
+}
+.picture-label {
+    display: inline;
+    position: relative;
+    width: 100%;
+    justify-content: center;
+    text-decoration: none;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.enlarging:hover {
+    transition: all 0.2s ease-out;
+    z-index: 1;
+    transform: scale(2,2);
+}
+
+.add-picture {
+    padding: 1% 1.3%;
+    position: relative;
+    width: 30%;
+    margin: auto;
+}
+
+#submitpicture {
+    margin-top: 10px;
+}
+
+h3{
+
+}
+
+.label {
+    position: relative;
+    width: 33.3%;
+    vertical-align: top;
+    text-align: center;
+    padding-bottom: 6%;
+}
+

@@ -1,0 +1,31 @@
+{% extends "gallery.html" %}
+{% block gallery %}
+
+    {% for picture_group in pictures %}
+        <div class="bar">
+            {% for picture in picture_group%}
+                <img class="image enlarging" src={{url_for('static', filename=picture[0])}}>
+            {% endfor %}
+        </div>
+        <div class="bar">
+            {% for picture in picture_group%}
+                <div class="label">
+                    <h3 class="image picture-label labels">{{picture[1]}}</h3>
+                    {% if current_user.is_authenticated %}
+                        <form method="POST" action="">
+                        {% set form = picture[2] %}
+                        {{ form.hidden_tag() }}
+                        {% for item in form %}
+                            {% if item.id not in ['csrf_token', 'picture_path']%}
+                                {{item}}
+                            {% elif item.id == 'picture_path' %}
+                                <div class="invisible">{{item}}</div>
+                            {% endif %}
+                        {% endfor %}
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}
