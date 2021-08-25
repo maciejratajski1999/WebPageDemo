@@ -115,16 +115,15 @@ def logout():
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'tux.png', mimetype='image/vnd.microsoft.icon')
+                               'tux.png',
+                               mimetype='image/vnd.microsoft.icon')
 
 @app.route('/blog', methods=['GET', 'POST'])
 def blog():
     if current_user.is_authenticated:
-        form = BlogPostForm()
+        form = new_blog_post(current_user.username)
+        if form.validate_on_submit():
+            add_post(form)
+            return redirect(url_for('blog'))
         return render_template('blog.html', subpages=subpages, current='blog', form=form)
     return render_template('blog.html', subpages=subpages, current='blog')
-
-@app.route('/register', methods=['GET', 'POST'])
-def reigster():
-    form = RegistrationForm()
-    return render_template('register.html', subpages=subpages, form=form)

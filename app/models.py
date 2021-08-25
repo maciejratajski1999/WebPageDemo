@@ -1,6 +1,8 @@
 from app import db, login_manager
-from sqlalchemy import Integer, String, ForeignKey, LargeBinary
+from sqlalchemy import Integer, String, ForeignKey, LargeBinary, DateTime, Text
 from flask_login import UserMixin
+from datetime import datetime
+from time import strftime
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -38,3 +40,13 @@ class Picture(db.Model):
 class Image(db.Model):
     path = db.Column(String, unique=False, nullable=False, primary_key=True)
     file = db.Column(LargeBinary, nullable=False)
+
+class Post(db.Model):
+    id = db.Column(Integer, primary_key=True)
+    author = db.Column(String, nullable=False)
+    title = db.Column(String(100), nullable=False)
+    date = db.Column(DateTime, nullable=False, default=datetime.now())
+    content = db.Column(Text, nullable=False)
+
+    def __repr__(self):
+        return f'<Post id={self.id}, title={self.title}, author={self.author}, date={self.date}>'

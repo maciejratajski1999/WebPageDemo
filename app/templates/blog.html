@@ -2,24 +2,25 @@
 {% block main %}
     <h1>Blog</h1>
     <main>
-        <form method="POST" action="" class="blog">
-            {{ form.hidden_tag() }}
-                {% for item in form %}
-                    {% if item.id != 'csrf_token'%}
-                        <div class="form">
-                            {% if item.id != 'submit' %}
-                                <a>{{item.label}}</a>
-                            {% endif %}
-                            {{item}}
-                            {% if item.errors %}
-                                {% for error in item.errors %}
-                                    <a class="error">{{error}}</a>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-        </form>
+        {% if current_user.is_authenticated %}
+            <form method="POST" action="" class="blog">
+                {{ form.hidden_tag() }}
+                    {% for item in form %}
+                        {% if item.id != 'csrf_token'%}
+                            <div class="form">
+                                {% if item.id != 'submit' %}
+                                    <a>{{item.label}}</a>
+                                {% endif %}
+                                {{item}}
+                                {% if item.errors %}
+                                    {% for error in item.errors %}
+                                        <a class="error">{{error}}</a>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+            </form>
+        {% endif %}
     </main>
-
 {% endblock%}

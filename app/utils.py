@@ -1,5 +1,5 @@
 from app import app, db, bcrypt
-from app.models import User, Product, Picture, Image
+from app.models import User, Product, Picture, Image, Post
 import os
 import string
 import random
@@ -40,8 +40,17 @@ def add_product(product_form):
 
 def add_picture(picture_form):
     picture_path = save_picture(picture_form.picture.data, subdirectory='pictures')
-    new_picture = Picture(product_id=picture_form.product_id.data, title=picture_form.title.data, path=picture_path)
+    new_picture = Picture(product_id=picture_form.product_id.data,
+                          title=picture_form.title.data,
+                          path=picture_path)
     db.session.add(new_picture)
+    db.session.commit()
+
+def add_post(post_form):
+    new_post = Post(author=post_form.author.data,
+                    title=post_form.title.data,
+                    content=post_form.content.data)
+    db.session.add(new_post)
     db.session.commit()
 
 def get_products_in_group_of_n(n=3):

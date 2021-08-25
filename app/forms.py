@@ -47,7 +47,7 @@ def picture_form_id(product_id):
 
     PictureFormID.product_id = IntegerField('Product ID', validators=[DataRequired()], default=product_id)
     PictureFormID.picture = FileField(validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
-    PictureFormID.title = StringField('Title', validators=[DataRequired()])
+    PictureFormID.title = StringField('Title', validators=[DataRequired(), Length(min=1)])
     PictureFormID.submitpicture = SubmitField('Add new Picture')
 
     return PictureFormID()
@@ -55,7 +55,7 @@ def picture_form_id(product_id):
 
 
 class ProductForm(FlaskForm):
-    name = StringField("Product Name", validators=[DataRequired()])
+    name = StringField("Product Name", validators=[DataRequired(), Length(min=1)])
     thumbnail = FileField(validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     submitproduct = SubmitField('Add new Product')
 
@@ -93,6 +93,13 @@ def delete_picture_form(path):
 
 class BlogPostForm(FlaskForm):
 
+    title = StringField('Title', validators=[DataRequired(), Length(min=1, max=32)])
     author = StringField("Author", validators=[DataRequired(), Length(min=2, max=32)], default='admin')
-    content = TextAreaField('Content', validators=[DataRequired(), Length(min=1, max=32)])
+    content = TextAreaField('Content', validators=[DataRequired(), Length(min=1)])
     submit = SubmitField('Create new post')
+
+def new_blog_post(author):
+    class BlogPostFormAuthor(BlogPostForm):
+        pass
+    BlogPostFormAuthor.author = StringField("Author", validators=[DataRequired(), Length(min=2, max=32)], default=author)
+    return BlogPostFormAuthor()
