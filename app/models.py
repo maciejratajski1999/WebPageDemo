@@ -2,7 +2,7 @@ from app import db, login_manager
 from sqlalchemy import Integer, String, ForeignKey, LargeBinary, DateTime, Text
 from flask_login import UserMixin
 from datetime import datetime
-from time import strftime
+
 
 @login_manager.user_loader
 def load_user(user_id):

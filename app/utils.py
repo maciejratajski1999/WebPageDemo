@@ -5,6 +5,8 @@ import string
 import random
 import base64
 from PIL import Image as PilImage
+from datetime import datetime
+from time import strftime
 
 allowed_characters = string.ascii_letters + string.digits
 subpages = {'home': {"Home": "/"}, 'about': {"About": "/about"}, 'products': {"Products": "/products"}, 'blog' : {'Blog' : '/blog'}}
@@ -49,7 +51,8 @@ def add_picture(picture_form):
 def add_post(post_form):
     new_post = Post(author=post_form.author.data,
                     title=post_form.title.data,
-                    content=post_form.content.data)
+                    content=post_form.content.data,
+                    date=datetime.now())
     db.session.add(new_post)
     db.session.commit()
 
@@ -157,3 +160,4 @@ def get_picture(picture_path):
 def get_image(picture_path):
     image = Image.query.get(picture_path)
     return image
+

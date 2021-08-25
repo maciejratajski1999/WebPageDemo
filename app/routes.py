@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, url_for, send_from_directory
 from app.forms import *
 from app.utils import *
 from flask_login import login_user, logout_user, current_user
+from time import strftime
 
 
 @app.route("/")
@@ -120,10 +121,12 @@ def favicon():
 
 @app.route('/blog', methods=['GET', 'POST'])
 def blog():
+    posts = [post for post in Post.query.all()]
+    posts.reverse()
     if current_user.is_authenticated:
         form = new_blog_post(current_user.username)
         if form.validate_on_submit():
             add_post(form)
             return redirect(url_for('blog'))
-        return render_template('blog.html', subpages=subpages, current='blog', form=form)
-    return render_template('blog.html', subpages=subpages, current='blog')
+        return render_template('blog.html', subpages=subpages, current='blog', form=form, posts=posts)
+    return render_template('blog.html', subpages=subpages, current='blog', posts=posts)
