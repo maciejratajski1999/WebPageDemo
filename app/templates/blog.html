@@ -1,7 +1,28 @@
 {% extends "layout.html" %}
 {% block main %}
     <h1>Blog</h1>
-    <main>
+    <main class="blog">
+        <div class="posts">
+            {% for post in posts %}
+                <article class="post">
+                    <div class="post-header">
+                        <div class="a-container">
+                            <a class="title post-header">{{post.title}}</a>
+                        </div>
+                        <div class="a-container">
+                            <a class="date post-header">{{post.date.strftime('%Y %m %d')}}</a>
+                        </div>
+                        <div class="a-container">
+                            <a class="author post-header">{{post.author}} </a>
+                        </div>
+                    </div>
+                    <p class="post">
+                        {{post.content}}
+                    </p>
+                </article>
+            {% endfor %}
+        </div>
+
         {% if current_user.is_authenticated %}
             <form method="POST" action="" class="blog">
                 {{ form.hidden_tag() }}

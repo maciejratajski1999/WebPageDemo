@@ -35,7 +35,7 @@
                             <th>{{product.name}}</th>
                             <th>
                                 {% for picture in product.pictures %}
-                                    <a href={{ url_for('static', filename=picture.path) }}>{{ picture.title }};</a>
+                                    <form method="GET"><a href={{ url_for('static', filename=picture.path) }}>{{ picture.title }};</a></form>
                                 {% endfor %}
                             </th>
                             <th>

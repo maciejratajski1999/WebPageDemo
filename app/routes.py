@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, url_for, send_from_directory
 from app.forms import *
 from app.utils import *
 from flask_login import login_user, logout_user, current_user
+from time import strftime
 
 
 @app.route("/")
@@ -63,28 +64,31 @@ def manage():
         products = Product.query.all()
         products = [product for product in products]
         picture_forms = {product.id : picture_form_id(product_id=product.id) for product in products}
-        if product_form.validate_on_submit():
+
+        if product_form.submitproduct.data and product_form.validate_on_submit():
             if product_form.thumbnail.data:
                 add_product(product_form)
                 return redirect('manage')
+
         for picture_form in picture_forms.values():
-            if picture_form.validate_on_submit():
+            if picture_form.submitpicture.data and  picture_form.validate_on_submit():
                 if picture_form.picture.data:
                     add_picture(picture_form)
                     return redirect(url_for('manage'))
+
         apply_changes_form = ApplyChangesForm()
-        if apply_changes_form.validate_on_submit():
+        if apply_changes_form.apply.data and apply_changes_form.validate_on_submit():
             if verify_password(current_user, apply_changes_form.password.data):
                 new_images_count = len(save_images())
                 flash(f"success, {new_images_count} new images saved in database", 'alert')
             else:
                 flash(f"Wrong password for {current_user.username}", 'alert')
+
         delete_product_forms = {product.id : delete_product_id(product.id) for product in products}
         for delete_form in delete_product_forms.values():
-            if delete_form.validate_on_submit():
-                if delete_form.confirm.data:
-                    delete_product_by_id(delete_form.product_id.data)
-                    return redirect(url_for('manage'))
+            if delete_form.delete.data and delete_form.validate_on_submit():
+                delete_product_by_id(delete_form.product_id.data)
+                return redirect(url_for('manage'))
 
         return render_template('manage.html', subpages=subpages, products=products, product_form=product_form, picture_forms=picture_forms, apply_changes_form=apply_changes_form, delete_forms=delete_product_forms)
     return render_template('home.html', subpages=subpages)
@@ -120,10 +124,12 @@ def favicon():
 
 @app.route('/blog', methods=['GET', 'POST'])
 def blog():
+    posts = [post for post in Post.query.all()]
+    posts.reverse()
     if current_user.is_authenticated:
         form = new_blog_post(current_user.username)
         if form.validate_on_submit():
             add_post(form)
             return redirect(url_for('blog'))
-        return render_template('blog.html', subpages=subpages, current='blog', form=form)
-    return render_template('blog.html', subpages=subpages, current='blog')
+        return render_template('blog.html', subpages=subpages, current='blog', form=form, posts=posts)
+    return render_template('blog.html', subpages=subpages, current='blog', posts=posts)

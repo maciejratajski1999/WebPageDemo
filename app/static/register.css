@@ -29,7 +29,6 @@ div.alert {
 }
 
 a.error{
-    display: block;
     width: 254px;
     padding: 1px 1px;
     background-color: rgb(255, 0, 0, 0.2);
