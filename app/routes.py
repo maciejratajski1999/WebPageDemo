@@ -128,9 +128,17 @@ def blog():
     posts.reverse()
     if current_user.is_authenticated:
         form = new_blog_post(current_user.username)
-        if form.validate_on_submit():
+        if form.submit.data and form.validate_on_submit():
             form.content.data = reformat_post_content(form.content)
             add_post(form)
             return redirect(url_for('blog'))
-        return render_template('blog.html', subpages=subpages, current='blog', form=form, posts=posts)
+        delete_blog_post_forms = {post.id : delete_blog_post_form_id(post.id) for post in posts}
+        for delete_form in delete_blog_post_forms.values():
+            print(delete_form.validate_on_submit(), 'test')
+            if delete_form.delete_post.data and delete_form.validate_on_submit():
+                post = Post.query.get(delete_form.post_id.data)
+                delete_post(post)
+                return redirect(url_for('blog'))
+        return render_template('blog.html', subpages=subpages, current='blog', form=form, posts=posts,
+                               delete_blog_post_forms=delete_blog_post_forms)
     return render_template('blog.html', subpages=subpages, current='blog', posts=posts)

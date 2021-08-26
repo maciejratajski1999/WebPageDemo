@@ -168,6 +168,12 @@ def delete_image(image):
     db.session.delete(image)
     db.session.commit()
 
+def delete_post(post):
+    if post.picture:
+        delete_picture(Post.query.get(post.picture))
+    db.session.delete(post)
+    db.session.commit()
+
 def get_picture(picture_path):
     picture = Picture.query.get(picture_path)
     return picture

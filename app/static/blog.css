@@ -73,7 +73,7 @@ div.post {
     margin-right: 15px;
     overflow: hidden;
 }
-div.a-container{
+.a-container{
     display: inline;
 }
 p.post p {
@@ -89,4 +89,8 @@ width: 100%;
 height: auto;
 justify-content: center;
 display: flex;
+}
+#delete_post {
+    float: right;
+    width: 10%;
 }

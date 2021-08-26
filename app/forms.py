@@ -4,6 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Integ
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import User
 
+
 class CheckboxCheck:
     def __init__(self, message=None):
         if not message:
@@ -13,6 +14,7 @@ class CheckboxCheck:
     def __call__(self, form, field):
         if not field.data:
             raise ValidationError(self.message)
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
@@ -37,7 +39,7 @@ class RegistrationForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     username = StringField('Username',
-                        validators=[DataRequired()])
+                           validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
@@ -49,8 +51,8 @@ class PictureForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     submitpicture = SubmitField('Add new Picture')
 
-def picture_form_id(product_id):
 
+def picture_form_id(product_id):
     class PictureFormID(PictureForm):
         pass
 
@@ -62,23 +64,24 @@ def picture_form_id(product_id):
     return PictureFormID()
 
 
-
 class ProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired(), Length(min=1)])
     thumbnail = FileField(validators=[FileAllowed(['jpg', 'jpeg', 'png']), DataRequired()])
     submitproduct = SubmitField('Add new Product')
 
+
 class ApplyChangesForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     apply = SubmitField('Apply Changes')
+
 
 class DeleteProductForm(FlaskForm):
     product_id = IntegerField('Product ID', validators=[DataRequired()], default=0)
     confirm = BooleanField('Delete this product', validators=[DataRequired(), CheckboxCheck()])
     delete = SubmitField('Delete product')
 
-def delete_product_id(product_id):
 
+def delete_product_id(product_id):
     class DeleteProductID(DeleteProductForm):
         pass
 
@@ -88,12 +91,13 @@ def delete_product_id(product_id):
 
     return DeleteProductID()
 
+
 class DeletePictureForm(FlaskForm):
     picture_path = StringField("Product Name", validators=[DataRequired()], default='')
     submit = SubmitField('Delete picture')
 
-def delete_picture_form(path):
 
+def delete_picture_form(path):
     class DeletePicture(DeletePictureForm):
         pass
 
@@ -101,17 +105,32 @@ def delete_picture_form(path):
 
     return DeletePicture()
 
-class BlogPostForm(FlaskForm):
 
+class BlogPostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=1, max=32)])
     author = StringField("Author", validators=[DataRequired(), Length(min=2, max=32)], default='admin')
     content = TextAreaField('Content', validators=[DataRequired(), Length(min=1)])
     picture = FileField('Picture', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     submit = SubmitField('Create new post')
 
+
 def new_blog_post(author):
     class BlogPostFormAuthor(BlogPostForm):
         pass
-    BlogPostFormAuthor.author = StringField("Author", validators=[DataRequired(), Length(min=2, max=32)], default=author)
+
+    BlogPostFormAuthor.author = StringField("Author", validators=[DataRequired(), Length(min=2, max=32)],
+                                            default=author)
     return BlogPostFormAuthor()
 
+
+class DeleteBlogPostForm(FlaskForm):
+    post_id = IntegerField('Post id', default=0)
+    delete_post = SubmitField('Delete this post')
+
+
+def delete_blog_post_form_id(post_id):
+    class DeleteBlogPostFormID(DeleteBlogPostForm):
+        pass
+
+    DeleteBlogPostFormID.post_id = IntegerField('Post id', default=post_id)
+    return DeleteBlogPostFormID()

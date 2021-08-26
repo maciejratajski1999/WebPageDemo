@@ -15,6 +15,19 @@
                         <div class="a-container">
                             <a class="author post-header">{{post.author}} </a>
                         </div>
+                        {% if current_user.is_authenticated %}
+                            <form class="a-container" method="POST">
+                                {% set delete_form = delete_blog_post_forms[post.id] %}
+                                {{ delete_form.hidden_tag() }}
+                                {% for item in delete_form %}
+                                    {% if item.id == 'delete_post' %}
+                                        <div class="delete-post">{{item}}</div>
+                                    {% elif item.id == 'post_id' %}
+                                        <div class="invisible">{{item}}</div>
+                                    {% endif %}
+                                {% endfor %}
+                            </form>
+                        {% endif %}
                     </div>
                     {% if post.picture %}
                         <div class="post-picture">
