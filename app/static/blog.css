@@ -94,3 +94,8 @@ display: flex;
     float: right;
     width: 10%;
 }
+img.post{
+    position: relative;
+    width: 100%;
+    height: auto;
+}
