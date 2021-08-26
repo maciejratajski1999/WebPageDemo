@@ -136,7 +136,6 @@ def blog():
         for delete_form in delete_blog_post_forms.values():
             if delete_form.delete_post.data and delete_form.validate_on_submit():
                 post = Post.query.get(delete_form.post_id.data)
-                print('deleting: ', post)
                 delete_post(post)
                 return redirect(url_for('blog'))
         return render_template('blog.html', subpages=subpages, current='blog', form=form, posts=posts,
