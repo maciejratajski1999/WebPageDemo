@@ -30,7 +30,7 @@ class Product(db.Model):
 
 
 class Picture(db.Model):
-    product_id = db.Column(Integer, ForeignKey('product.id'), nullable=False)
+    product_id = db.Column(Integer, ForeignKey('product.id'), nullable=True)
     path = db.Column(String, unique=False, nullable=False, primary_key=True)
     title = db.Column(String, unique=False, nullable=True)
 
@@ -47,6 +47,7 @@ class Post(db.Model):
     title = db.Column(String(100), nullable=False)
     date = db.Column(DateTime, nullable=False, default=datetime.now())
     content = db.Column(Text, nullable=False)
+    picture = db.Column(String, unique=False, nullable=True)
 
     def __repr__(self):
         return f'<Post id={self.id}, title={self.title}, author={self.author}, date={self.date}>'

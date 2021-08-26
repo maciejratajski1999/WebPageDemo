@@ -47,11 +47,25 @@ def add_picture(picture_form):
     db.session.add(new_picture)
     db.session.commit()
 
+def add_blog_picture(form_picture):
+    path = save_picture(form_picture.data, subdirectory='pictures')
+    new_picture = Picture(path=path)
+    db.session.add(new_picture)
+    db.session.commit()
+    return path
+
 def add_post(post_form):
+    if post_form.picture.data:
+        print(f'jest obrazek: {post_form.picture.data}')
+        path = add_blog_picture(post_form.picture)
+    else:
+        print('nie ma obrazka')
+        path = None
     new_post = Post(author=post_form.author.data,
                     title=post_form.title.data,
                     content=post_form.content.data,
-                    date=datetime.now())
+                    date=datetime.now(),
+                    picture=path)
     db.session.add(new_post)
     db.session.commit()
 

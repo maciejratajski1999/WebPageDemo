@@ -5,7 +5,7 @@ main.blog{
 textarea#content {
     position: relative;
     width: 100%;
-
+    height: 300px;
 }
 
 form.blog {
@@ -78,4 +78,15 @@ div.a-container{
 }
 p.post p {
     padding: 0px 0px;
+}
+div.post-form{
+    display: grid;
+    margin: 15px 5px;
+}
+div.post-picture{
+position: relative;
+width: 100%;
+height: auto;
+justify-content: center;
+display: flex;
 }

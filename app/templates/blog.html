@@ -16,6 +16,11 @@
                             <a class="author post-header">{{post.author}} </a>
                         </div>
                     </div>
+                    {% if post.picture %}
+                        <div class="post-picture">
+                            <img class="post" src={{url_for('static', filename=post.picture)}}>
+                        </div>
+                    {% endif %}
                     <div class="post">
                         {{post.content|safe}}
                     </div>
@@ -24,11 +29,11 @@
         </div>
 
         {% if current_user.is_authenticated %}
-            <form method="POST" action="" class="blog">
+            <form method="POST" action="" class="blog" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                     {% for item in form %}
                         {% if item.id != 'csrf_token'%}
-                            <div class="form">
+                            <div class="post-form">
                                 {% if item.id != 'submit' %}
                                     <a>{{item.label}}</a>
                                 {% endif %}
