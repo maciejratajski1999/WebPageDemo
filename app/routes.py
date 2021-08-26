@@ -129,6 +129,7 @@ def blog():
     if current_user.is_authenticated:
         form = new_blog_post(current_user.username)
         if form.validate_on_submit():
+            form.content.data = reformat_post_content(form.content)
             add_post(form)
             return redirect(url_for('blog'))
         return render_template('blog.html', subpages=subpages, current='blog', form=form, posts=posts)

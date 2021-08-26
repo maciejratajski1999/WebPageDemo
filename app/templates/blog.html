@@ -16,9 +16,9 @@
                             <a class="author post-header">{{post.author}} </a>
                         </div>
                     </div>
-                    <p class="post">
-                        {{post.content}}
-                    </p>
+                    <div class="post">
+                        {{post.content|safe}}
+                    </div>
                 </article>
             {% endfor %}
         </div>

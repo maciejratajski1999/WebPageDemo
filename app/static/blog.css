@@ -65,12 +65,17 @@ a.date{
     float: right;
 }
 
-p.post {
+div.post {
     position: relative;
-    width: 100%;
+    width: auto;
+    text-align: justify;
     margin-left: 15px;
     margin-right: 15px;
+    overflow: hidden;
 }
 div.a-container{
     display: inline;
+}
+p.post p {
+    padding: 0px 0px;
 }

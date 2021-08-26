@@ -6,7 +6,6 @@ import random
 import base64
 from PIL import Image as PilImage
 from datetime import datetime
-from time import strftime
 
 allowed_characters = string.ascii_letters + string.digits
 subpages = {'home': {"Home": "/"}, 'about': {"About": "/about"}, 'products': {"Products": "/products"}, 'blog' : {'Blog' : '/blog'}}
@@ -163,3 +162,5 @@ def get_image(picture_path):
     image = Image.query.get(picture_path)
     return image
 
+def reformat_post_content(post_content):
+    return '<p class="blogpost">' + post_content.data.replace('\n', '<br>') + '</p>'
