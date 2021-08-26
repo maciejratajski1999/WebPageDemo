@@ -171,6 +171,9 @@ def delete_image(image):
 def delete_post(post):
     if post.picture:
         delete_picture(Post.query.get(post.picture))
+        image = get_image(post.picture)
+        if image:
+            delete_image(image)
     db.session.delete(post)
     db.session.commit()
 
