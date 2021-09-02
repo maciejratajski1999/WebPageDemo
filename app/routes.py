@@ -129,15 +129,36 @@ def blog():
     if current_user.is_authenticated:
         form = new_blog_post(current_user.username)
         if form.submit.data and form.validate_on_submit():
-            form.content.data = reformat_post_content(form.content)
             add_post(form)
             return redirect(url_for('blog'))
+
         delete_blog_post_forms = {post.id : delete_blog_post_form_id(post.id) for post in posts}
         for delete_form in delete_blog_post_forms.values():
             if delete_form.delete_post.data and delete_form.validate_on_submit():
                 post = Post.query.get(delete_form.post_id.data)
                 delete_post(post)
                 return redirect(url_for('blog'))
+
+        edit_blog_post_forms = {post.id: edit_blog_post_form_id(post.id) for post in posts}
+        for edit_form in edit_blog_post_forms.values():
+            if edit_form.edit.data and edit_form.validate_on_submit():
+                return redirect(url_for('editpost', post_id=edit_form.post_id.data))
+
         return render_template('blog.html', subpages=subpages, current='blog', form=form, posts=posts,
-                               delete_blog_post_forms=delete_blog_post_forms)
+                               delete_blog_post_forms=delete_blog_post_forms,
+                               edit_blog_post_forms=edit_blog_post_forms)
     return render_template('blog.html', subpages=subpages, current='blog', posts=posts)
+
+
+@app.route('/editpost', methods=['GET', 'POST'])
+def editpost():
+    if current_user.is_authenticated:
+        post_id = int(request.args.get('post_id'))
+        post = Post.query.get(post_id)
+        form = edit_blog_post(post)
+        if form.validate_on_submit():
+            edit_post(post, form)
+            return redirect('blog')
+        return render_template('editpost.html', subpages=subpages, form=form)
+    else:
+        return redirect(url_for('home'))

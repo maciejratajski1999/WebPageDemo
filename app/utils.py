@@ -56,10 +56,8 @@ def add_blog_picture(form_picture):
 
 def add_post(post_form):
     if post_form.picture.data:
-        print(f'jest obrazek: {post_form.picture.data}')
         path = add_blog_picture(post_form.picture)
     else:
-        print('nie ma obrazka')
         path = None
     new_post = Post(author=post_form.author.data,
                     title=post_form.title.data,
@@ -182,5 +180,11 @@ def get_image(picture_path):
     image = Image.query.get(picture_path)
     return image
 
-def reformat_post_content(post_content):
-    return '<p class="blogpost">' + post_content.data.replace('\n', '<br>') + '</p>'
+def edit_post(post, form):
+    post.title = form.title.data
+    post.content = form.content.data
+    if form.picture.data:
+        delete_picture(post.picture)
+        post.picture = add_blog_picture(form.picture)
+    post.author = form.author.data
+    db.session.commit()

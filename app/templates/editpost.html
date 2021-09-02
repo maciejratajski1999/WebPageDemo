@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block main %}
+    <h1>Edit post: {{ form.title.data }}</h1>
+    <main class="blog">
+      <form method="POST" action="" class="blog" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+          {% for item in form %}
+              {% if item.id != 'csrf_token'%}
+                  <div class="post-form">
+                      {% if item.id != 'submit' %}
+                          <a>{{item.label}}</a>
+                      {% endif %}
+                      {{item}}
+                      {% if item.errors %}
+                          {% for error in item.errors %}
+                              <a class="error">{{error}}</a>
+                          {% endfor %}
+                      {% endif %}
+                  </div>
+              {% endif %}
+          {% endfor %}
+        </form>
+    </main>
+{% endblock%}

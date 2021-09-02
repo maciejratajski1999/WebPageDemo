@@ -92,7 +92,13 @@ display: flex;
 }
 #delete_post {
     float: right;
-    width: 10%;
+    width: 108px;
+}
+#edit{
+    float: right;
+    width: 108px;
+    position: relative;
+    bottom: 19px;
 }
 img.post{
     position: relative;

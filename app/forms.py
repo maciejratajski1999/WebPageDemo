@@ -134,3 +134,24 @@ def delete_blog_post_form_id(post_id):
 
     DeleteBlogPostFormID.post_id = IntegerField('Post id', default=post_id)
     return DeleteBlogPostFormID()
+
+class EditBlogPostForm(FlaskForm):
+    post_id = IntegerField('Post id', default=0)
+    edit = SubmitField('Edit this post')
+
+
+def edit_blog_post_form_id(post_id):
+    class EditBlogPostFormID(EditBlogPostForm):
+        pass
+
+    EditBlogPostFormID.post_id = IntegerField('Post id', default=post_id)
+    return EditBlogPostFormID()
+
+def edit_blog_post(post):
+    class BlogPostFormID(BlogPostForm):
+        pass
+    BlogPostFormID.title = StringField('Title', validators=[DataRequired(), Length(min=1, max=32)], default=post.title)
+    BlogPostFormID.author = StringField("Author", validators=[DataRequired(), Length(min=2, max=32)], default=post.author)
+    BlogPostFormID.content = TextAreaField('Content', validators=[DataRequired(), Length(min=1)], default=post.content)
+    BlogPostFormID.submit = SubmitField(f'Edit post: {post.title}')
+    return BlogPostFormID()
