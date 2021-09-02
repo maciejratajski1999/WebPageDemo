@@ -76,21 +76,13 @@ def manage():
                     add_picture(picture_form)
                     return redirect(url_for('manage'))
 
-        apply_changes_form = ApplyChangesForm()
-        if apply_changes_form.apply.data and apply_changes_form.validate_on_submit():
-            if verify_password(current_user, apply_changes_form.password.data):
-                new_images_count = len(save_images())
-                flash(f"success, {new_images_count} new images saved in database", 'alert')
-            else:
-                flash(f"Wrong password for {current_user.username}", 'alert')
-
         delete_product_forms = {product.id : delete_product_id(product.id) for product in products}
         for delete_form in delete_product_forms.values():
             if delete_form.delete.data and delete_form.validate_on_submit():
                 delete_product_by_id(delete_form.product_id.data)
                 return redirect(url_for('manage'))
 
-        return render_template('manage.html', subpages=subpages, products=products, product_form=product_form, picture_forms=picture_forms, apply_changes_form=apply_changes_form, delete_forms=delete_product_forms)
+        return render_template('manage.html', subpages=subpages, products=products, product_form=product_form, picture_forms=picture_forms, delete_forms=delete_product_forms)
     return render_template('home.html', subpages=subpages)
 
 

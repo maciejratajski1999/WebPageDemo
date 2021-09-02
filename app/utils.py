@@ -23,6 +23,9 @@ def save_picture(file_field_form, subdirectory):
     picture_path = os.path.join(app.root_path, f'static/{subdirectory}', random_name)
     image.save(picture_path)
     path = f"{subdirectory}/" + random_name
+    full_path = os.path.join(f'app/static/{path}')
+    file_binary = convert_img_to_binary(full_path)
+    add_image(path, file_binary)
     return path
 
 
@@ -184,7 +187,8 @@ def edit_post(post, form):
     post.title = form.title.data
     post.content = form.content.data
     if form.picture.data:
-        delete_picture(post.picture)
+        old_picture = Picture.query.get(post.picture)
+        delete_picture(old_picture)
         post.picture = add_blog_picture(form.picture)
     post.author = form.author.data
     db.session.commit()

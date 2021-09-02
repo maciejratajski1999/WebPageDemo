@@ -70,10 +70,6 @@ class ProductForm(FlaskForm):
     submitproduct = SubmitField('Add new Product')
 
 
-class ApplyChangesForm(FlaskForm):
-    password = PasswordField('Password', validators=[DataRequired()])
-    apply = SubmitField('Apply Changes')
-
 
 class DeleteProductForm(FlaskForm):
     product_id = IntegerField('Product ID', validators=[DataRequired()], default=0)
