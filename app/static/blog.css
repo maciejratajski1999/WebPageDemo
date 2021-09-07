@@ -84,9 +84,11 @@ display: flex;
 }
 #delete_post {
     width: 120px;
+    font-size: x-small;
 }
 #edit{
     width: 120px;
+    font-size: x-small;
 }
 img.post{
     position: relative;
