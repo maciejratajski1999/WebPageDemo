@@ -51,6 +51,11 @@ def product():
         if post_form.submit.data and post_form.validate_on_submit():
             add_post(post_form)
             return redirect(url_for('product', product_id=product_id))
+        if delete_blog_post_forms[post.id].delete_post.data and delete_blog_post_forms[post.id].validate_on_submit():
+            delete_post(post)
+            return redirect(url_for('product', product_id=product_id))
+        if edit_blog_post_forms[post.id].edit.data and edit_blog_post_forms[post.id]:
+            return redirect(url_for('editpost', post_id=post.id))
 
         delete_picture_forms = [picture[2] for picture in pictures]
         for form in delete_picture_forms:
@@ -162,7 +167,10 @@ def editpost():
         form = edit_blog_post(post)
         if form.validate_on_submit():
             edit_post(post, form)
-            return redirect('blog')
+            if post.product_id:
+                return redirect(url_for('product', product_id=post.product_id))
+            else:
+                return redirect('blog')
         return render_template('editpost.html', subpages=subpages, form=form)
     else:
         return redirect(url_for('home'))
