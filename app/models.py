@@ -23,6 +23,7 @@ class Product(db.Model):
     id = db.Column(Integer, primary_key=True)
     name = db.Column(String(50), unique=True, nullable=False)
     pictures = db.relationship('Picture', backref='product', lazy=True)
+    post = db.relationship('Post', backref='product', lazy=True)
     thumbnail = db.Column(String, unique=False, nullable=False, default='tux.png')
 
     def __repr__(self):
@@ -43,6 +44,7 @@ class Image(db.Model):
 
 class Post(db.Model):
     id = db.Column(Integer, primary_key=True)
+    product_id = db.Column(Integer, ForeignKey('product.id'), nullable=True)
     author = db.Column(String, nullable=False)
     title = db.Column(String(100), nullable=False)
     date = db.Column(DateTime, nullable=False, default=datetime.now())

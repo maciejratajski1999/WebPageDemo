@@ -43,16 +43,27 @@ def product():
         pictures = product.pictures
         pictures = [[picture.path, picture.title, delete_picture_form(picture.path)] for picture in pictures]
         pictures_split = split_into_groups_of_n(pictures, n=3)
+
+        post = product.post[0]
+        delete_blog_post_forms = {post.id: delete_blog_post_form_id(post.id)}
+        edit_blog_post_forms = {post.id: edit_blog_post_form_id(post.id)}
+        post_form = product_post_form(product_id)
+        if post_form.submit.data and post_form.validate_on_submit():
+            add_post(post_form)
+            return redirect(url_for('product', product_id=product_id))
+
         delete_picture_forms = [picture[2] for picture in pictures]
         for form in delete_picture_forms:
-            if form.validate_on_submit():
+            if form.submit.data and form.validate_on_submit():
                 if form.picture_path.data:
                     pic_to_delete = get_picture(form.picture_path.data)
                     title = pic_to_delete.title
                     delete_picture(pic_to_delete)
                     flash(f'Deleted a picture: {title}', 'alert')
                     return redirect(url_for('product', product_id=product_id))
-        return render_template('product.html', subpages=subpages, current=current, pictures=pictures_split)
+        return render_template('product.html', subpages=subpages, current=current, pictures=pictures_split, post=post,
+                               form=post_form, delete_blog_post_forms=delete_blog_post_forms,
+                               edit_blog_post_forms=edit_blog_post_forms)
     else:
         return redirect('products')
 
@@ -121,6 +132,7 @@ def blog():
     if current_user.is_authenticated:
         form = new_blog_post(current_user.username)
         if form.submit.data and form.validate_on_submit():
+            form.content.data = reformat_post_content(form.content)
             add_post(form)
             return redirect(url_for('blog'))
 

@@ -28,4 +28,17 @@
             {% endfor %}
         </div>
     {% endfor %}
+    {% if post %}
+        <div class="bar">
+            {% include 'post.html' %}
+                {% block post %}
+                {% endblock %}
+        </div>
+    {% else %}
+        {% if current_user.is_authenticated %}
+            {% include 'new_post.html' %}
+            {% block new_post %}
+            {% endblock %}
+        {% endif %}
+    {% endif %}
 {% endblock %}

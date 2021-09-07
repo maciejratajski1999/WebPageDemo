@@ -1,0 +1,24 @@
+{% block admin_post_options %}
+  <form class="a-container" method="POST">
+      {% set delete_form = delete_blog_post_forms[post.id] %}
+      {{ delete_form.hidden_tag() }}
+      {% for item in delete_form %}
+          {% if item.id == 'delete_post' %}
+              <div class="delete-post">{{item}}</div>
+          {% elif item.id == 'post_id' %}
+              <div class="invisible">{{item}}</div>
+          {% endif %}
+      {% endfor %}
+  </form>
+  <form class="a-container" method="POST">
+      {% set edit_form = edit_blog_post_forms[post.id] %}
+      {{ edit_form.hidden_tag() }}
+      {% for item in edit_form %}
+          {% if item.id == 'edit' %}
+              <div class="delete-post">{{item}}</div>
+          {% elif item.id == 'post_id' %}
+              <div class="invisible">{{item}}</div>
+          {% endif %}
+      {% endfor %}
+  </form>
+{% endblock%}

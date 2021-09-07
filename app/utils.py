@@ -62,11 +62,16 @@ def add_post(post_form):
         path = add_blog_picture(post_form.picture)
     else:
         path = None
+    if post_form.product_id:
+        product_id = post_form.product_id.data
+    else:
+        product_id = None
     new_post = Post(author=post_form.author.data,
                     title=post_form.title.data,
                     content=post_form.content.data,
                     date=datetime.now(),
-                    picture=path)
+                    picture=path,
+                    product_id=product_id)
     db.session.add(new_post)
     db.session.commit()
 
@@ -185,10 +190,13 @@ def get_image(picture_path):
 
 def edit_post(post, form):
     post.title = form.title.data
-    post.content = form.content.data
+    post.content = reformat_post_content(form.content)
     if form.picture.data:
         old_picture = Picture.query.get(post.picture)
         delete_picture(old_picture)
         post.picture = add_blog_picture(form.picture)
     post.author = form.author.data
     db.session.commit()
+
+def reformat_post_content(post_content):
+    return post_content.data.replace('\n', '<br>').replace('\r', '')

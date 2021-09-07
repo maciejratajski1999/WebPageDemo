@@ -151,3 +151,9 @@ def edit_blog_post(post):
     BlogPostFormID.content = TextAreaField('Content', validators=[DataRequired(), Length(min=1)], default=post.content)
     BlogPostFormID.submit = SubmitField(f'Edit post: {post.title}')
     return BlogPostFormID()
+
+def product_post_form(product_id):
+    class ProductPostForm(BlogPostForm):
+        product_id = IntegerField('Product ID', default=0)
+    ProductPostForm.product_id = IntegerField('Product ID', default=product_id)
+    return ProductPostForm()

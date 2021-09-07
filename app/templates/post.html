@@ -1,0 +1,30 @@
+{% block post %}
+  <article class="post">
+      <div class="post-header">
+          <div class="a-container">
+              <a class="title post-header">{{post.title}}</a>
+          </div>
+          <div class="a-container">
+              <a class="date post-header">{{post.date.strftime('%Y %m %d')}}</a>
+          </div>
+          <div class="a-container">
+              <a class="author post-header">{{post.author}} </a>
+          </div>
+          {% if current_user.is_authenticated %}
+              {% include 'admin_post_options.html' %}
+              {% block admin_post_options %}
+              {% endblock %}
+          {% endif %}
+      </div>
+      {% if post.picture %}
+          <div class="post-picture">
+              <img class="post" src={{url_for('static', filename=post.picture)}}>
+          </div>
+      {% endif %}
+      <div class="post">
+          <p class="blogpost">
+              {{post.content|safe}}
+          </p>
+      </div>
+  </article>
+{% endblock %}
