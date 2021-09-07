@@ -46,23 +46,17 @@ div.post-header {
 }
 a.post-header {
     padding: 10px 15px;
-    padding: 1.3% 3.3%;
     text-align: center;
+    justify-content: center;
 }
 
-a.title{
+.title{
     float: left;
     font-size: x-large;
 }
 a.author{
-    position: relative;
-    top: 5px;
-    float: right;
 }
 a.date{
-    position: relative;
-    top: 5px;
-    float: right;
 }
 
 div.post {
@@ -74,7 +68,8 @@ div.post {
     overflow: hidden;
 }
 .a-container{
-    display: inline;
+    display: flex;
+    float: right;
 }
 p.post p {
     padding: 0px 0px;
@@ -91,17 +86,16 @@ justify-content: center;
 display: flex;
 }
 #delete_post {
-    float: right;
-    width: 108px;
+    width: 120px;
 }
 #edit{
-    float: right;
-    width: 108px;
-    position: relative;
-    bottom: 19px;
+    width: 120px;
 }
 img.post{
     position: relative;
     width: 100%;
     height: auto;
+}
+#title{
+    float: left;
 }
