@@ -51,8 +51,6 @@ a.post-header {
 }
 
 .title{
-    float: left;
-    font-size: x-large;
 }
 a.author{
 }
@@ -69,7 +67,6 @@ div.post {
 }
 .a-container{
     display: flex;
-    float: right;
 }
 p.post p {
     padding: 0px 0px;
@@ -96,6 +93,10 @@ img.post{
     width: 100%;
     height: auto;
 }
-#title{
+.right{
+    float: right;
+}
+.left{
     float: left;
+    font-size: x-large;
 }

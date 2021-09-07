@@ -1,13 +1,13 @@
 {% block post %}
   <article class="post">
       <div class="post-header">
-          <div class="a-container">
+          <div class="a-container left">
               <a class="title post-header">{{post.title}}</a>
           </div>
-          <div class="a-container">
+          <div class="a-container right">
               <a class="date post-header">{{post.date.strftime('%Y %m %d')}}</a>
           </div>
-          <div class="a-container">
+          <div class="a-container right">
               <a class="author post-header">{{post.author}} </a>
           </div>
           {% if current_user.is_authenticated %}
