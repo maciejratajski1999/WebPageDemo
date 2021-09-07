@@ -62,9 +62,9 @@ def add_post(post_form):
         path = add_blog_picture(post_form.picture)
     else:
         path = None
-    if post_form.product_id:
+    try:
         product_id = post_form.product_id.data
-    else:
+    except AttributeError:
         product_id = None
     new_post = Post(author=post_form.author.data,
                     title=post_form.title.data,
