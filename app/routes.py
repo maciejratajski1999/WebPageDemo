@@ -127,7 +127,7 @@ def favicon():
 
 @app.route('/blog', methods=['GET', 'POST'])
 def blog():
-    posts = [post for post in Post.query.all()]
+    posts = [post for post in Post.query.all() if not post.product_id]
     posts.reverse()
     if current_user.is_authenticated:
         form = new_blog_post(current_user.username)
