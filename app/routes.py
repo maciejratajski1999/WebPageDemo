@@ -9,7 +9,7 @@ from time import strftime
 @app.route("/home")
 def home():
     current = 'home'
-    return render_template('home.html', subpages=subpages, current=current)
+    return render_template('home.html', subpages=subpages, current=current, title=current)
 
 
 @app.route("/about")
