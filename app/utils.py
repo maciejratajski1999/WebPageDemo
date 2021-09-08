@@ -200,3 +200,15 @@ def edit_post(post, form):
 
 def reformat_post_content(post_content):
     return post_content.data.replace('\n', '<br>').replace('\r', '')
+
+
+def css_root(red=206, green=100, blue=90):
+    root = ":root {--bg: " + f"rgb({red}, {green}, {blue});" + "}"
+    return root
+
+def generate_css(bg_color=[206, 100, 90]):
+    root = css_root(bg_color[0], bg_color[1], bg_color[2])
+    path = 'app/static/settings.css'
+    with open(path, 'w') as css_file:
+        css_file.write(root)
+
