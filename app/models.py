@@ -66,7 +66,7 @@ class PictureModel(object):
 
 
 class Picture(PictureModel, db.Model, Model):
-    image_id = db.Column(Integer, ForeignKey('image.id'), nullable=False)
+    image_id = db.Column(Integer, ForeignKey('image.id'), nullable=True)
     path = db.Column(String, unique=False, nullable=False, primary_key=True)
     product_id = db.Column(Integer, ForeignKey('product.id'), nullable=True)
     title = db.Column(String, unique=False, nullable=True)
@@ -78,7 +78,7 @@ class Picture(PictureModel, db.Model, Model):
 
 
 class Thumbnail(PictureModel, db.Model, Model):
-    image_id = db.Column(Integer, ForeignKey('image.id'), nullable=False)
+    image_id = db.Column(Integer, ForeignKey('image.id'), nullable=True)
     path = db.Column(String, unique=False, nullable=False, primary_key=True)
     product_id = db.Column(Integer, ForeignKey('product.id'), nullable=False)
 
@@ -87,7 +87,7 @@ class Thumbnail(PictureModel, db.Model, Model):
 
 
 class PostPicture(PictureModel, db.Model, Model):
-    image_id = db.Column(Integer, ForeignKey('image.id'), nullable=False)
+    image_id = db.Column(Integer, ForeignKey('image.id'), nullable=True)
     path = db.Column(String, unique=False, nullable=False, primary_key=True)
     post_id = db.Column(Integer, ForeignKey('post.id'), nullable=True)
 

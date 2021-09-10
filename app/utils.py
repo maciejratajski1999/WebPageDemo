@@ -24,7 +24,10 @@ def save_picture(file_field_form_data, subdirectory):
     path = f"{subdirectory}/" + random_name
     full_path = os.path.join(f'app/static/{path}')
     file_binary = convert_img_to_binary(full_path)
-    return path, add_image(file_binary)
+    if app.config['SAVE_IMAGES']:
+        return path, add_image(file_binary)
+    else:
+        return path, None
 
 def save_png_file(file_field_form, name='background.png'):
     image = PilImage.open(file_field_form)
@@ -42,20 +45,26 @@ def add_product(product_form):
     product = Product(name=product_form.name.data)
     product.save()
     thumbnail_path, image = save_picture(product_form.thumbnail.data, subdirectory='thumbnails')
-    thumbnail = Thumbnail(path=thumbnail_path, image_id=image.id, product_id=product.id)
+    thumbnail = Thumbnail(path=thumbnail_path, image_id=image_id(image), product_id=product.id)
     thumbnail.save()
+
+def image_id(image):
+    if image is None:
+        return None
+    else:
+        return image.id
 
 def add_picture(picture_form):
     picture_path, image = save_picture(picture_form.picture.data, subdirectory='pictures')
     new_picture = Picture(product_id=picture_form.product_id.data,
                           title=picture_form.title.data,
                           path=picture_path,
-                          image_id=image.id)
+                          image_id=image_id(image))
     new_picture.save()
 
 def add_blog_picture(form_picture, post_id):
     path, image = save_picture(form_picture.data, subdirectory='pictures')
-    new_picture = PostPicture(path=path, post_id=post_id, image_id=image.id)
+    new_picture = PostPicture(path=path, post_id=post_id, image_id=image_id(image))
     new_picture.save()
     return path
 
@@ -126,7 +135,7 @@ def decode_binary_to_img(binary):
     byte_code = base64.b64decode(decoded_b64)
     return byte_code
 
-
+# LEGACY
 # def save_images():
 #     subdirectories = ['pictures', 'thumbnails']
 #     images_paths = [image.path for image in Image.query.all()]
@@ -142,6 +151,21 @@ def decode_binary_to_img(binary):
 #                     file_binary = convert_img_to_binary(full_path)
 #                     images.append(add_image(path=path, file=file_binary))
 #     return images
+
+def save_images():
+    new_images = []
+    all_models = [picture for picture in Picture.query.all()] + [
+        thumbnail for thumbnail in Thumbnail.query.all()] + [
+        post_picture for post_picture in PostPicture.query.all()]
+    to_save = [model for model in all_models if model.image_id == None]
+    for model in to_save:
+        path = os.path.join(f'app/static/{model.path}')
+        file_binary = convert_img_to_binary(path)
+        image = add_image(file_binary)
+        model.image_id = image.id
+        new_images.append(image)
+    db.session.commit()
+    return new_images
 
 def convert_img_to_binary(path):
     with open(path, "rb") as file:
