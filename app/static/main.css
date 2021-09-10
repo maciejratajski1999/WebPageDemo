@@ -46,3 +46,7 @@ main {
     background-repeat: no-repeat;
     background-position: center center;
 }
+hr{
+    width: 90%;
+    color: var(--bg);
+}

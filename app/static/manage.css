@@ -66,3 +66,11 @@ input#picture{
 input#submitproduct{
     width: 259px;
 }
+.form-label{
+    font-size: x-large;
+}
+.labeled-input{
+    display: grid;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

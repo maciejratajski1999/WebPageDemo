@@ -59,6 +59,8 @@ div.product-container{
     position: relative;
     width: 30%;
     margin: auto;
+    display: grid;
+    justify-content: center;
 }
 
 #submitpicture {
