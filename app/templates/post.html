@@ -18,7 +18,7 @@
       </div>
       {% if post.picture %}
           <div class="post-picture">
-              <img class="post" src={{url_for('static', filename=post.picture)}}>
+              <img class="post" src={{url_for('static', filename=post.picture[0].path)}}>
           </div>
       {% endif %}
       <div class="post">

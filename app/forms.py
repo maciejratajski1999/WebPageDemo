@@ -107,7 +107,7 @@ class BlogPostForm(FlaskForm):
     author = StringField("Author", validators=[DataRequired(), Length(min=2, max=32)], default='admin')
     content = TextAreaField('Content', validators=[DataRequired(), Length(min=1)])
     picture = FileField('Picture', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
-    submit = SubmitField('Create new post')
+    submit_post = SubmitField('Create new post')
 
 
 def new_blog_post(author):

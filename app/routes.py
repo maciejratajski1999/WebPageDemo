@@ -22,7 +22,7 @@ def about():
 def gallery():
     current = 'gallery'
     products = Product.query.all()
-    products = [[product.id, product.name, product.thumbnail] for product in products]
+    products = [[product.id, product.name, product.thumbnail.path] for product in products]
     products = split_into_groups_of_n(objects=products, n=3)
     return render_template('gallery.html', subpages=subpages, current=current, products=products)
 
@@ -43,32 +43,39 @@ def product():
         pictures = product.pictures
         pictures = [[picture.path, picture.title, delete_picture_form(picture.path)] for picture in pictures]
         pictures_split = split_into_groups_of_n(pictures, n=3)
-
-        post = product.post[0]
-        delete_blog_post_forms = {post.id: delete_blog_post_form_id(post.id)}
-        edit_blog_post_forms = {post.id: edit_blog_post_form_id(post.id)}
-        post_form = product_post_form(product_id)
-        if post_form.submit.data and post_form.validate_on_submit():
-            add_post(post_form)
-            return redirect(url_for('product', product_id=product_id))
-        if delete_blog_post_forms[post.id].delete_post.data and delete_blog_post_forms[post.id].validate_on_submit():
-            delete_post(post)
-            return redirect(url_for('product', product_id=product_id))
-        if edit_blog_post_forms[post.id].edit.data and edit_blog_post_forms[post.id]:
-            return redirect(url_for('editpost', post_id=post.id))
-
         delete_picture_forms = [picture[2] for picture in pictures]
         for form in delete_picture_forms:
             if form.submit.data and form.validate_on_submit():
                 if form.picture_path.data:
                     pic_to_delete = get_picture(form.picture_path.data)
                     title = pic_to_delete.title
-                    delete_picture(pic_to_delete)
+                    pic_to_delete.delete()
                     flash(f'Deleted a picture: {title}', 'alert')
                     return redirect(url_for('product', product_id=product_id))
-        return render_template('product.html', subpages=subpages, current=current, pictures=pictures_split, post=post,
-                               form=post_form, delete_blog_post_forms=delete_blog_post_forms,
-                               edit_blog_post_forms=edit_blog_post_forms)
+
+        if product.post:
+            post = product.post[0]
+            delete_blog_post_forms = {post.id: delete_blog_post_form_id(post.id)}
+            edit_blog_post_forms = {post.id: edit_blog_post_form_id(post.id)}
+            if delete_blog_post_forms[post.id].delete_post.data and delete_blog_post_forms[post.id].validate_on_submit():
+                post.delete()
+                return redirect(url_for('product', product_id=product_id))
+            if edit_blog_post_forms[post.id].edit.data and edit_blog_post_forms[post.id]:
+                return redirect(url_for('editpost', post_id=post.id))
+            return render_template('product.html', subpages=subpages, current=current, pictures=pictures_split, post=post,
+                                   form=None, delete_blog_post_forms=delete_blog_post_forms,
+                                   edit_blog_post_forms=edit_blog_post_forms)
+        else:
+            post_form = product_post_form(product_id)
+            if post_form.submit_post.data and post_form.validate_on_submit():
+                add_post(post_form)
+                return redirect(url_for('product', product_id=product_id))
+            return render_template('product.html', subpages=subpages, current=current, pictures=pictures_split, post=None,
+                                   form=post_form, delete_blog_post_forms={},
+                                   edit_blog_post_forms={})
+
+
+
     else:
         return redirect('products')
 
@@ -136,7 +143,7 @@ def blog():
     posts.reverse()
     if current_user.is_authenticated:
         form = new_blog_post(current_user.username)
-        if form.submit.data and form.validate_on_submit():
+        if form.submit_post.data and form.validate_on_submit():
             form.content.data = reformat_post_content(form.content)
             add_post(form)
             return redirect(url_for('blog'))
@@ -145,7 +152,7 @@ def blog():
         for delete_form in delete_blog_post_forms.values():
             if delete_form.delete_post.data and delete_form.validate_on_submit():
                 post = Post.query.get(delete_form.post_id.data)
-                delete_post(post)
+                post.delete()
                 return redirect(url_for('blog'))
 
         edit_blog_post_forms = {post.id: edit_blog_post_form_id(post.id) for post in posts}

@@ -1,5 +1,5 @@
 from app import app, db, bcrypt
-from app.models import User, Product, Picture, Image, Post
+from app.models import *
 import os
 import string
 import random
@@ -11,10 +11,9 @@ allowed_characters = string.ascii_letters + string.digits
 subpages = {'home': {"Home": "/"}, 'about': {"About": "/about"}, 'products': {"Products": "/products"}, 'blog' : {'Blog' : '/blog'}}
 
 
-def add_image(path, file):
-    image = Image(path=path, file=file)
-    db.session.add(image)
-    db.session.commit()
+def add_image(file):
+    image = Image(file=file)
+    image.save()
     return image
 
 def save_picture(file_field_form, subdirectory):
@@ -25,43 +24,37 @@ def save_picture(file_field_form, subdirectory):
     path = f"{subdirectory}/" + random_name
     full_path = os.path.join(f'app/static/{path}')
     file_binary = convert_img_to_binary(full_path)
-    add_image(path, file_binary)
-    return path
+    return path, add_image(file_binary)
 
 
 def register_user(register_form):
     hashed_password = bcrypt.generate_password_hash(register_form.password.data).decode('utf-8')
     new_user = User(username=register_form.username.data, email=register_form.email.data, password=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
+    new_user.save()
 
 
 def add_product(product_form):
-    thumbnail_path = save_picture(product_form.thumbnail.data, subdirectory='thumbnails')
-    new_product = Product(name=product_form.name.data, thumbnail=thumbnail_path)
-    db.session.add(new_product)
-    db.session.commit()
+    product = Product(name=product_form.name.data)
+    product.save()
+    thumbnail_path, image = save_picture(product_form.thumbnail.data, subdirectory='thumbnails')
+    thumbnail = Thumbnail(path=thumbnail_path, image_id=image.id, product_id=product.id)
+    thumbnail.save()
 
 def add_picture(picture_form):
-    picture_path = save_picture(picture_form.picture.data, subdirectory='pictures')
+    picture_path, image = save_picture(picture_form.picture.data, subdirectory='pictures')
     new_picture = Picture(product_id=picture_form.product_id.data,
                           title=picture_form.title.data,
-                          path=picture_path)
-    db.session.add(new_picture)
-    db.session.commit()
+                          path=picture_path,
+                          image_id=image.id)
+    new_picture.save()
 
-def add_blog_picture(form_picture):
-    path = save_picture(form_picture.data, subdirectory='pictures')
-    new_picture = Picture(path=path)
-    db.session.add(new_picture)
-    db.session.commit()
+def add_blog_picture(form_picture, post_id):
+    path, image = save_picture(form_picture.data, subdirectory='pictures')
+    new_picture = PostPicture(path=path, post_id=post_id, image_id=image.id)
+    new_picture.save()
     return path
 
 def add_post(post_form):
-    if post_form.picture.data:
-        path = add_blog_picture(post_form.picture)
-    else:
-        path = None
     try:
         product_id = post_form.product_id.data
     except AttributeError:
@@ -70,14 +63,15 @@ def add_post(post_form):
                     title=post_form.title.data,
                     content=post_form.content.data,
                     date=datetime.now(),
-                    picture=path,
                     product_id=product_id)
-    db.session.add(new_post)
-    db.session.commit()
+    new_post.save()
+    if post_form.picture.data:
+        add_blog_picture(post_form.picture, new_post.id)
+        db.session.commit()
 
 def get_products_in_group_of_n(n=3):
     products = Product.query.all()
-    products = [[str(product.id), product.name, product.thumbnail] for product in products]
+    products = [[str(product.id), product.name, product.thumbnail[0].path] for product in products]
     products = split_into_groups_of_n(objects=products, n=n)
     return products
 
@@ -106,14 +100,14 @@ def delete_unused_images():
     thumbnails = [os.path.join(thumbnails_path, thumbnail) for thumbnail in thumbnails]
     static_files = pictures + thumbnails
     static_files = [file for file in static_files if os.path.splitext(file)[1] == '.png']
-    images = [image.path for image in Image.query.all()]
     pictures = [picture.path for picture in Picture.query.all()]
-    products = [product.thumbnail for product in Product.query.all()]
+    thumbnails = [thumbnail.path for thumbnail in Thumbnail.query.all()]
+    post_pictures = [post_picture.path for post_picture in PostPicture.query.all()]
     for filename in static_files:
         subpath, file = os.path.split(filename)
         image_path = os.path.join(os.path.split(subpath)[1], file)
-        if image_path not in images + pictures + products:
-            print(filename + " nieuywany, usuwam")
+        if image_path not in pictures + thumbnails + post_pictures:
+            print(filename + " nieuzywany, usuwam")
             os.remove(filename)
 
 def generate_from_image(image):
@@ -128,21 +122,21 @@ def decode_binary_to_img(binary):
     return byte_code
 
 
-def save_images():
-    subdirectories = ['pictures', 'thumbnails']
-    images_paths = [image.path for image in Image.query.all()]
-    images = []
-    valid_paths = [picture.path for picture in Picture.query.all()] + [product.thumbnail for product in Product.query.all()]
-    for subdirectory in subdirectories:
-        full_path = os.path.join(app.root_path, f'static/{subdirectory}')
-        for filename in os.listdir(full_path):
-            path = os.path.join(subdirectory, filename)
-            if path in valid_paths:
-                if path not in images_paths:
-                    full_path = os.path.join(f'app/static/{path}')
-                    file_binary = convert_img_to_binary(full_path)
-                    images.append(add_image(path=path, file=file_binary))
-    return images
+# def save_images():
+#     subdirectories = ['pictures', 'thumbnails']
+#     images_paths = [image.path for image in Image.query.all()]
+#     images = []
+#     valid_paths = [picture.path for picture in Picture.query.all()] + [product.thumbnail for product in Product.query.all()]
+#     for subdirectory in subdirectories:
+#         full_path = os.path.join(app.root_path, f'static/{subdirectory}')
+#         for filename in os.listdir(full_path):
+#             path = os.path.join(subdirectory, filename)
+#             if path in valid_paths:
+#                 if path not in images_paths:
+#                     full_path = os.path.join(f'app/static/{path}')
+#                     file_binary = convert_img_to_binary(full_path)
+#                     images.append(add_image(path=path, file=file_binary))
+#     return images
 
 def convert_img_to_binary(path):
     with open(path, "rb") as file:
@@ -155,30 +149,7 @@ def verify_password(user, password):
 
 def delete_product_by_id(product_id):
     product = Product.query.get(product_id)
-    thumbnail = get_image(product.thumbnail)
-    if thumbnail:
-        delete_image(thumbnail)
-    for picture in product.pictures:
-        delete_picture(picture)
-    db.session.delete(product)
-    db.session.commit()
-
-def delete_picture(picture):
-    image = get_image(picture.path)
-    if image:
-        delete_image(image)
-    db.session.delete(picture)
-    db.session.commit()
-
-def delete_image(image):
-    db.session.delete(image)
-    db.session.commit()
-
-def delete_post(post):
-    if post.picture:
-        delete_picture(Picture.query.get(post.picture))
-    db.session.delete(post)
-    db.session.commit()
+    product.delete()
 
 def get_picture(picture_path):
     picture = Picture.query.get(picture_path)
@@ -191,12 +162,13 @@ def get_image(picture_path):
 def edit_post(post, form):
     post.title = form.title.data
     post.content = reformat_post_content(form.content)
-    if form.picture.data:
-        old_picture = Picture.query.get(post.picture)
-        delete_picture(old_picture)
-        post.picture = add_blog_picture(form.picture)
     post.author = form.author.data
     db.session.commit()
+    if form.picture:
+        if post.picture:
+            for pic in post.picture:
+                pic.delete()
+        add_blog_picture(form.picture, post_id=post.id)
 
 def reformat_post_content(post_content):
     return post_content.data.replace('\n', '<br>').replace('\r', '')
