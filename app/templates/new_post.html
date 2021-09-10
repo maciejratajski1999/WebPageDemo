@@ -1,11 +1,12 @@
 {% block new_post %}
     <hr>
     <form method="POST" action="" class="blog" enctype="multipart/form-data">
+        <label class="form-label">New Blogpost</label>
         {{ form.hidden_tag() }}
             {% for item in form %}
                 {% if item.id != 'csrf_token'%}
                     <div class="post-form">
-                        {% if item.id not in ['submit', 'product_id'] %}
+                        {% if item.id not in ['submit_post', 'product_id'] %}
                             <a>{{item.label}}</a>
                         {% endif %}
                         {% if item.id in ['product_id']%}

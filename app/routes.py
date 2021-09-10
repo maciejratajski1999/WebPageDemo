@@ -9,13 +9,13 @@ from time import strftime
 @app.route("/home")
 def home():
     current = 'home'
-    return render_template('home.html', subpages=subpages, current=current, title=current)
+    return render_template('home.html', subpages=subpages, current=current, title='Home')
 
 
 @app.route("/about")
 def about():
     current = 'about'
-    return render_template('about.html', subpages=subpages, current=current)
+    return render_template('about.html', subpages=subpages, current=current, title='About')
 
 
 @app.route("/gallery", methods=['GET', 'POST'])
@@ -31,7 +31,7 @@ def gallery():
 def products():
     current = 'products'
     products = get_products_in_group_of_n(3)
-    return render_template('products.html', subpages=subpages, current=current, products=products)
+    return render_template('products.html', subpages=subpages, current=current, products=products, title='Products')
 
 
 @app.route("/product", methods=['GET', 'POST'])
@@ -64,7 +64,8 @@ def product():
                 return redirect(url_for('editpost', post_id=post.id))
             return render_template('product.html', subpages=subpages, current=current, pictures=pictures_split, post=post,
                                    form=None, delete_blog_post_forms=delete_blog_post_forms,
-                                   edit_blog_post_forms=edit_blog_post_forms)
+                                   edit_blog_post_forms=edit_blog_post_forms,
+                                   title=f'{product.name}')
         else:
             post_form = product_post_form(product_id)
             if post_form.submit_post.data and post_form.validate_on_submit():
@@ -72,7 +73,8 @@ def product():
                 return redirect(url_for('product', product_id=product_id))
             return render_template('product.html', subpages=subpages, current=current, pictures=pictures_split, post=None,
                                    form=post_form, delete_blog_post_forms={},
-                                   edit_blog_post_forms={})
+                                   edit_blog_post_forms={},
+                                   title=f'{product.name}')
 
 
 
@@ -84,15 +86,19 @@ def product():
 def manage():
     if current_user.is_authenticated:
         product_form = ProductForm()
-        products = Product.query.all()
-        products = [product for product in products]
-        picture_forms = {product.id : picture_form_id(product_id=product.id) for product in products}
-
         if product_form.submitproduct.data and product_form.validate_on_submit():
             if product_form.thumbnail.data:
                 add_product(product_form)
                 return redirect('manage')
 
+        background_form = BackgroundForm()
+        if background_form.submit_background.data and background_form.validate_on_submit():
+            save_png_file(background_form.file.data, name='background.png')
+            return redirect(url_for('manage'))
+
+        products = Product.query.all()
+        products = [product for product in products]
+        picture_forms = {product.id : picture_form_id(product_id=product.id) for product in products}
         for picture_form in picture_forms.values():
             if picture_form.submitpicture.data and  picture_form.validate_on_submit():
                 if picture_form.picture.data:
@@ -105,8 +111,13 @@ def manage():
                 delete_product_by_id(delete_form.product_id.data)
                 return redirect(url_for('manage'))
 
-        return render_template('manage.html', subpages=subpages, products=products, product_form=product_form, picture_forms=picture_forms, delete_forms=delete_product_forms)
-    return render_template('home.html', subpages=subpages)
+        return render_template('manage.html', subpages=subpages, products=products,
+                               product_form=product_form,
+                               background_form=background_form,
+                               picture_forms=picture_forms,
+                               delete_forms=delete_product_forms,
+                               title='Manage Page')
+    return redirect(url_for('home'))
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -122,7 +133,7 @@ def login():
             return redirect(url_for('home'))
         else:
             flash("Login unsuccessful", 'alert')
-    return render_template('login.html', subpages=subpages, form=form)
+    return render_template('login.html', subpages=subpages, form=form, title='Login')
 
 
 @app.route("/logout")
@@ -162,8 +173,9 @@ def blog():
 
         return render_template('blog.html', subpages=subpages, current='blog', form=form, posts=posts,
                                delete_blog_post_forms=delete_blog_post_forms,
-                               edit_blog_post_forms=edit_blog_post_forms)
-    return render_template('blog.html', subpages=subpages, current='blog', posts=posts)
+                               edit_blog_post_forms=edit_blog_post_forms,
+                               title='Blog')
+    return render_template('blog.html', subpages=subpages, current='blog', posts=posts, title='Blog')
 
 
 @app.route('/editpost', methods=['GET', 'POST'])
@@ -178,6 +190,6 @@ def editpost():
                 return redirect(url_for('product', product_id=post.product_id))
             else:
                 return redirect('blog')
-        return render_template('editpost.html', subpages=subpages, form=form)
+        return render_template('editpost.html', subpages=subpages, form=form, title=f'Edit: {post.title}')
     else:
         return redirect(url_for('home'))

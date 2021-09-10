@@ -16,8 +16,8 @@ def add_image(file):
     image.save()
     return image
 
-def save_picture(file_field_form, subdirectory):
-    image = PilImage.open(file_field_form)
+def save_picture(file_field_form_data, subdirectory):
+    image = PilImage.open(file_field_form_data)
     random_name = ''.join([random.choice(allowed_characters) for i in range(16)]) + '.png'
     picture_path = os.path.join(app.root_path, f'static/{subdirectory}', random_name)
     image.save(picture_path)
@@ -25,6 +25,11 @@ def save_picture(file_field_form, subdirectory):
     full_path = os.path.join(f'app/static/{path}')
     file_binary = convert_img_to_binary(full_path)
     return path, add_image(file_binary)
+
+def save_png_file(file_field_form, name='background.png'):
+    image = PilImage.open(file_field_form)
+    path = os.path.join(app.root_path, 'static', name)
+    image.save(path)
 
 
 def register_user(register_form):

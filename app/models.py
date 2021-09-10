@@ -97,7 +97,6 @@ class PostPicture(PictureModel, db.Model, Model):
 
 class Image(db.Model, Model):
     id = db.Column(Integer, primary_key=True, nullable=False, unique=True)
-    # picture_model = db.relationship('PictureModel', backref='image', lazy=True)
     picture = db.relationship('Picture', backref='image', lazy=True)
     thumbnail = db.relationship('Thumbnail', backref='image', lazy=True)
     post_picture = db.relationship('PostPicture', backref='image', lazy=True)

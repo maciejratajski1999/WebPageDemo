@@ -102,3 +102,6 @@ img.post{
     float: left;
     font-size: x-large;
 }
+#submit_post{
+    width: 260px;
+}

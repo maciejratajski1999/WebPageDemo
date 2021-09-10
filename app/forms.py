@@ -116,6 +116,7 @@ def new_blog_post(author):
 
     BlogPostFormAuthor.author = StringField("Author", validators=[DataRequired(), Length(min=2, max=32)],
                                             default=author)
+    BlogPostFormAuthor.submit_post = SubmitField('Create new post')
     return BlogPostFormAuthor()
 
 
@@ -157,3 +158,7 @@ def product_post_form(product_id):
         product_id = IntegerField('Product ID', default=0)
     ProductPostForm.product_id = IntegerField('Product ID', default=product_id)
     return ProductPostForm()
+
+class BackgroundForm(FlaskForm):
+    file = FileField(validators=[DataRequired(), FileAllowed(['jpg', 'jpeg', 'png'])])
+    submit_background = SubmitField('Change Background')
