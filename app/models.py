@@ -1,15 +1,11 @@
-import sqlalchemy.orm
-
-from app import app, db, login_manager
 from sqlalchemy import Integer, String, ForeignKey, LargeBinary, DateTime, Text
-from sqlalchemy.ext.declarative import declared_attr
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
+import base64
 
+db = SQLAlchemy()
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 class Model:
 
@@ -101,9 +97,20 @@ class Image(db.Model, Model):
     thumbnail = db.relationship('Thumbnail', backref='image', lazy=True)
     post_picture = db.relationship('PostPicture', backref='image', lazy=True)
     file = db.Column(LargeBinary, nullable=False)
-
     def __repr__(self):
         return f'<Image picture={self.picture}, thumbnail={self.thumbnail}, post={self.post_picture}>'
+
+    def get_children(self):
+        children = list(self.picture) + list(self.thumbnail) + list(self.post_picture)
+        return children
+
+    def delete(self):
+        children = self.get_children()
+        for child in children:
+            child.image_id = None
+        db.session.delete(self)
+        db.session.commit()
+
 
 
 class Post(db.Model, Model):
@@ -124,3 +131,19 @@ class Post(db.Model, Model):
                 pic.delete()
         db.session.delete(self)
         db.session.commit()
+
+def add_image(file):
+    image = Image(file=file)
+    image.save()
+    return image
+
+def convert_img_to_binary(path):
+    with open(path, "rb") as file:
+        encoded_base64 = base64.b64encode(file.read())
+        encoded_binary = "".join([format(n, '08b') for n in encoded_base64])
+        return bytes(encoded_binary.encode('utf-8'))
+
+def decode_binary_to_img(binary):
+    decoded_b64 = b"".join([bytes(chr(int(binary[i:i + 8], 2)), "utf-8") for i in range(0, len(binary), 8)])
+    byte_code = base64.b64decode(decoded_b64)
+    return byte_code

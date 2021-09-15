@@ -10,7 +10,7 @@ def dependencies(requirements='requirements.txt'):
 
 setup(
     name='app',
-    version='beta_0.3',
+    version='beta_0.5',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
