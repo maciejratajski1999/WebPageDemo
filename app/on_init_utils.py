@@ -3,9 +3,12 @@ from app.models import *
 
 def on_init_utils(app):
     app = app
+    static= 'static'
+    thumbnails = 'thumbnails'
+    pictures = 'pictures'
 
-    def delete_unused_images():
-        static, thumbnails, pictures = 'static', 'thumbnails', 'pictures'
+
+    def delete_unused_images(pictures='pictures', thumbnails='thumbnails'):
         pictures_path = os.path.join(app.root_path, static, pictures)
         pictures = list(os.listdir(pictures_path))
         pictures = [os.path.join(pictures_path, picture) for picture in pictures]
@@ -49,7 +52,7 @@ def on_init_utils(app):
 
 
     def generate_static_pngs():
-        static_files = list(os.listdir('app/static/pictures')) + list(os.listdir('app/static/thumbnails'))
+        static_files = list(os.listdir(os.path.join(app.root_path, static, pictures))) + list(os.listdir(os.path.join(app.root_path, static, thumbnails)))
         static_files = [file for file in static_files if os.path.splitext(file)[1] == '.png']
         images = Image.query.all()
         for image in images:

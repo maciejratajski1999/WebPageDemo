@@ -1,15 +1,8 @@
 from flask import Flask
-from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
-
-
-
 
 def create_app(config_filename='config.py'):
     app = Flask(__name__)
     app.config.from_pyfile(config_filename)
-    bcrypt = Bcrypt(app)
-    login_manager = LoginManager(app)
     from app.models import db, User, Product, Thumbnail, Picture, Post, PostPicture, Image
     db.init_app(app)
     with app.app_context():
@@ -25,4 +18,4 @@ def create_app(config_filename='config.py'):
             delete_all_images()
 
 
-    return app, bcrypt, login_manager, db
+    return app
