@@ -1,0 +1,5 @@
+graft app/static
+graft app/templates
+graft app/static/pictures
+graft app/static/thumbnails
+graft app/db

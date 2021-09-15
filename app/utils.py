@@ -106,10 +106,11 @@ def generate_images():
             continue
 
 def delete_unused_images():
-    pictures_path = 'app/static/pictures'
+    static, thumbnails, pictures = 'static', 'thumbnails', 'pictures'
+    pictures_path = os.path.join(app.root_path, static, pictures)
     pictures = list(os.listdir(pictures_path))
     pictures = [os.path.join(pictures_path, picture) for picture in pictures]
-    thumbnails_path = 'app/static/thumbnails'
+    thumbnails_path = os.path.join(app.root_path, static, thumbnails)
     thumbnails = list(os.listdir(thumbnails_path))
     thumbnails = [os.path.join(thumbnails_path, thumbnail) for thumbnail in thumbnails]
     static_files = pictures + thumbnails
@@ -135,22 +136,6 @@ def decode_binary_to_img(binary):
     byte_code = base64.b64decode(decoded_b64)
     return byte_code
 
-# LEGACY
-# def save_images():
-#     subdirectories = ['pictures', 'thumbnails']
-#     images_paths = [image.path for image in Image.query.all()]
-#     images = []
-#     valid_paths = [picture.path for picture in Picture.query.all()] + [product.thumbnail for product in Product.query.all()]
-#     for subdirectory in subdirectories:
-#         full_path = os.path.join(app.root_path, f'static/{subdirectory}')
-#         for filename in os.listdir(full_path):
-#             path = os.path.join(subdirectory, filename)
-#             if path in valid_paths:
-#                 if path not in images_paths:
-#                     full_path = os.path.join(f'app/static/{path}')
-#                     file_binary = convert_img_to_binary(full_path)
-#                     images.append(add_image(path=path, file=file_binary))
-#     return images
 
 def save_images():
     new_images = []
@@ -212,4 +197,3 @@ def generate_css(bg_color=[206, 100, 90]):
     path = 'app/static/settings.css'
     with open(path, 'w') as css_file:
         css_file.write(root)
-
