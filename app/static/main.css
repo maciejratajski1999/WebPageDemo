@@ -1,52 +1,30 @@
-@import "gallery.css";
-@import "navbar.css";
-@import "register.css";
-@import "manage.css";
-@import "blog.css";
 @import "settings.css";
+@import "navbar.css";
 
 html {
     background-color: var(--bg);
 }
 body {
     margin: 0;
+    justify-items: center;
 }
 h1 {
     position: relative;
-    text-align: center;
-    text-shadow: 2px 2px 5px black;
-    color: white;
-}
-main {
 
-    background-color: var(--bg);
-    background-image: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.2) 65%, rgba(255,255,255,0.3) 100%);
-    border-style: outset;
-    border-color: #b30000;
-    padding-bottom: 15px;
-    padding-top: 15px;
-    box-shadow: 18px 18px 45px 11px #100505;
-    border-radius: 20px;
 }
-
 .content {
-    position: absolute;
-    width: 75%;
-    left: 12.5%;
-    right: 12.5%;
     display: grid;
+    grid-auto-rows: 0fr;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0fr 0fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        "title"
+        "main";
+    justify-items: center;
+    position: relative;
     top: 60px;
-}
-.background {
-    position: fixed;
-    width: 100%;
-    background-image: url("background.png");
-    z-index: 0;
-    top: 150px;
-    bottom: 20px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+    padding-top: 40px;
 }
 hr{
     width: 90%;
