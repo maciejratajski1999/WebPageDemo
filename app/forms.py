@@ -90,6 +90,7 @@ def delete_product_id(product_id):
 
 class DeletePictureForm(FlaskForm):
     picture_path = StringField("Product Name", validators=[DataRequired()], default='')
+    confirm = BooleanField('Delete this picture', validators=[DataRequired(), CheckboxCheck()])
     submit = SubmitField('Delete picture')
 
 

@@ -1,16 +1,19 @@
 @import "settings.css";
 @import "navbar.css";
-
+@import "gallery.css";
+@import "blog.css";
+@import "manage.css";
 html {
     background-color: var(--bg);
 }
 body {
     margin: 0;
-    justify-items: center;
 }
 h1 {
     position: relative;
-
+    text-align: center;
+    text-shadow: 2px 2px 5px black;
+    color: white;
 }
 .content {
     display: grid;
@@ -52,4 +55,14 @@ main {
 hr{
     width: 90%;
     color: var(--bg);
+}
+.invisible {
+    visibility: hidden;
+    position: relative;
+    width: 0px;
+    height: 0px;
+}
+form {
+    position: relative;
+    width: 100%;
 }

@@ -12,8 +12,7 @@
                 <div class="label">
                     <h3 class="image picture-label labels">{{picture[1]}}</h3>
                     {% if current_user.is_authenticated %}
-                        <hr>
-                        <form method="POST" action="">
+                        <form method="POST" action="" class="delete-picture">
                         {% set form = picture[2] %}
                         {{ form.hidden_tag() }}
                         {% for item in form %}

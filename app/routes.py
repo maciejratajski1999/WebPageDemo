@@ -31,7 +31,9 @@ def gallery():
 def products():
     current = 'products'
     products = get_products_in_group_of_n(3)
-    return render_template('products.html', subpages=subpages, current=current, products=products, title='Products')
+    product_form = ProductForm()
+    return render_template('products.html', subpages=subpages, current=current, products=products, title='Products',
+                           product_form=product_form)
 
 
 @app.route("/product", methods=['GET', 'POST'])

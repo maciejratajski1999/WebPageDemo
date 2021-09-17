@@ -41,12 +41,6 @@ div.manager {
 div.manager input{
     width: auto;
 }
-.invisible {
-    visibility: hidden;
-    position: relative;
-    width: 0px;
-    height: 0px;
-}
 input#delete {
     width: 100%;
 }
@@ -54,18 +48,7 @@ input#delete {
 form.delete-product {
     padding: 0px 0px;
 }
-input#confirm {
-    width: 100%;
-}
-input#thumbnail{
-    width: 259px;
-}
-input#picture{
-    width: 259px;
-}
-input#submitproduct{
-    width: 259px;
-}
+
 .form-label{
     font-size: x-large;
 }

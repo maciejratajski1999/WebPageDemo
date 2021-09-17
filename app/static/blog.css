@@ -22,8 +22,8 @@ form.blog div.form input{
 
 div.posts {
     position: relative;
-    width: 90%;
-    left: 5%;
+    width: 95%;
+    left: 2.5%;
     display: block;
 }
 
@@ -31,8 +31,7 @@ article.post{
     position: relative;
     width: 100%;
     margin-bottom: 25px;
-    box-shadow: inset 0 0 0 1000px rgba(255,255,255,.1);
-    border-radius: 10px;
+    box-shadow: 5px 5px 20px 5px black;
 }
 
 div.post-header {
@@ -42,21 +41,12 @@ div.post-header {
     padding: 0;
     background-color: var(--bg);
     box-shadow: inset 0 0 0 1000px rgba(0,0,10,.1);
-    border-radius: 10px;
 }
 a.post-header {
     padding: 10px 15px;
     text-align: center;
     justify-content: center;
 }
-
-.title{
-}
-a.author{
-}
-a.date{
-}
-
 div.post {
     position: relative;
     width: auto;
@@ -67,6 +57,10 @@ div.post {
 }
 .a-container{
     display: flex;
+    position: relative;
+    height: 40px;
+    align-items: center;
+    display: flex;
 }
 p.post p {
     padding: 0px 0px;
@@ -75,13 +69,15 @@ div.post-form{
     display: grid;
     margin: 15px 5px;
 }
+
 div.post-picture{
-position: relative;
-width: 100%;
-height: auto;
-justify-content: center;
-display: flex;
+    position: relative;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    display: flex;
 }
+
 #delete_post {
     width: 120px;
     font-size: x-small;

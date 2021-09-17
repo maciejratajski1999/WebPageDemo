@@ -13,4 +13,32 @@
             {% endfor %}
         </div>
     {% endfor %}
+    {% if current_user.is_authenticated %}
+        <div class="bar">
+            <hr>
+        </div>
+        <div class="bar">
+            <form method="POST"  enctype="multipart/form-data">
+                {{ product_form.hidden_tag() }}
+                 <div class="add-picture">
+                    <label class="form-label">New Product</label>
+                    {% for item in product_form %}
+                        {% if item.id != 'csrf_token'%}
+                            <div class="labeled-input">
+                                {% if item.id != 'submitproduct'%}
+                                    {{item.label}}
+                                {% endif %}
+                                    {{item}}
+                                {% if item.errors %}
+                                    {% for error in item.errors %}
+                                        <a class="error">{{error}}</a>
+                                    {% endfor %}
+                                {% endif %}
+                             </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}
