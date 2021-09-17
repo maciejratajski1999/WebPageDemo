@@ -66,3 +66,25 @@ form {
     position: relative;
     width: 100%;
 }
+div.flash-messages {
+    padding: 15px;
+    position: absolute;
+    z-index: 8;
+}
+div.alert {
+    text-shadow: 2px 2px 7px red;
+    color: white;
+    font-size: 150%;
+    display: block;
+}
+
+a.error{
+    width: 254px;
+    padding: 1px 1px;
+    background-color: rgb(255, 0, 0, 0.2);
+    border-style: solid;
+    border-color: red;
+    border-width: 1px;
+    color: black;
+    font-size: small;
+}
