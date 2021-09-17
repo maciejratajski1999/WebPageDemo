@@ -1,24 +1,25 @@
-from flask import render_template, flash, redirect, url_for, send_from_directory, request
+from flask import render_template, flash, redirect, url_for, send_from_directory, request, Blueprint
 from app.forms import *
 from app.utils import *
 from flask_login import login_user, logout_user, current_user
 from time import strftime
 
+app_routes = Blueprint('app', __name__)
 
-@app.route("/")
-@app.route("/home")
+@app_routes.route("/")
+@app_routes.route("/home")
 def home():
     current = 'home'
     return render_template('home.html', subpages=subpages, current=current, title='Home')
 
 
-@app.route("/about")
+@app_routes.route("/about")
 def about():
     current = 'about'
     return render_template('about.html', subpages=subpages, current=current, title='About')
 
 
-@app.route("/gallery", methods=['GET', 'POST'])
+@app_routes.route("/gallery", methods=['GET', 'POST'])
 def gallery():
     current = 'gallery'
     products = Product.query.all()
@@ -27,7 +28,7 @@ def gallery():
     return render_template('gallery.html', subpages=subpages, current=current, products=products)
 
 
-@app.route("/products", methods=['GET'])
+@app_routes.route("/products", methods=['GET'])
 def products():
     current = 'products'
     products = get_products_in_group_of_n(3)
@@ -36,7 +37,7 @@ def products():
                            product_form=product_form)
 
 
-@app.route("/product", methods=['GET', 'POST'])
+@app_routes.route("/product", methods=['GET', 'POST'])
 def product():
     current = "products"
     product_id = int(request.args.get('product_id'))
@@ -84,7 +85,7 @@ def product():
         return redirect('products')
 
 
-@app.route("/manage", methods=['GET', 'POST'])
+@app_routes.route("/manage", methods=['GET', 'POST'])
 def manage():
     if current_user.is_authenticated:
         product_form = ProductForm()
@@ -122,7 +123,7 @@ def manage():
     return redirect(url_for('home'))
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@app_routes.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         flash(f"Already logged in as {current_user.username}", 'alert')
@@ -138,19 +139,19 @@ def login():
     return render_template('login.html', subpages=subpages, form=form, title='Login')
 
 
-@app.route("/logout")
+@app_routes.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for('home'))
 
 
-@app.route('/favicon.ico')
+@app_routes.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'tux.png',
                                mimetype='image/vnd.microsoft.icon')
 
-@app.route('/blog', methods=['GET', 'POST'])
+@app_routes.route('/blog', methods=['GET', 'POST'])
 def blog():
     posts = [post for post in Post.query.all() if not post.product_id]
     posts.reverse()
@@ -180,7 +181,7 @@ def blog():
     return render_template('blog.html', subpages=subpages, current='blog', posts=posts, title='Blog')
 
 
-@app.route('/editpost', methods=['GET', 'POST'])
+@app_routes.route('/editpost', methods=['GET', 'POST'])
 def editpost():
     if current_user.is_authenticated:
         post_id = int(request.args.get('post_id'))
