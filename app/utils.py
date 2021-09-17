@@ -1,11 +1,15 @@
-from app import app, db, bcrypt, login_manager
+from app import app
 from app.models import *
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 import os
 import string
 import random
 from PIL import Image as PilImage
 from datetime import datetime
 
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
 allowed_characters = string.ascii_letters + string.digits
 subpages = {'home': {"Home": "/"}, 'about': {"About": "/about"}, 'products': {"Products": "/products"},
             'blog': {'Blog': '/blog'}}
